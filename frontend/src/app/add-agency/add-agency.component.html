@@ -1,0 +1,127 @@
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto ">
+                <li class="nav-item">
+                    <button class="btn btn-danger" (click)="back()"><i class="bi bi-box-arrow-left"></i> Back</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="message != ''">
+    {{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="closeMessage()"></button>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="main-body">
+        <div class="row">
+            <h2 class="display-3">Add new Agency</h2>
+            <form class="was-validated" #myForm="ngForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" [(ngModel)]="username" id="username" placeholder="Enter username"
+                        class="form-control" name="username" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" [(ngModel)]="password" id="password" placeholder="Enter password"
+                        class="form-control" name="password"
+                        pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%#?&])[A-Za-z][A-Za-z\d@$!%#?&]{6,11}" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field. Password must start with a letter, must
+                        contain one lowercase, uppercase, number, special character, 7-12 long</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone number</label>
+                    <input type="text" [(ngModel)]="phone" id="phone" placeholder="Enter phone number"
+                        class="form-control" name="phone" required pattern="[+]{0,1}[0-9]+">
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field (only numbers or + numbers).</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" [(ngModel)]="email" id="email" placeholder="Enter email" class="form-control"
+                        name="email" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="agencyName">Name</label>
+                    <input type="text" [(ngModel)]="agencyName" id="agencyName" placeholder="Enter name"
+                        class="form-control" name="agencyName" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" [(ngModel)]="country" id="country" placeholder="Enter country"
+                        class="form-control" name="country" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="town">Town</label>
+                    <input type="text" [(ngModel)]="town" id="town" placeholder="Enter town" class="form-control"
+                        name="town" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="street">Street</label>
+                    <input type="text" [(ngModel)]="street" id="street" placeholder="Enter street"
+                        class="form-control" name="street" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="streetNum">Street number</label>
+                    <input type="text" [(ngModel)]="streetNumber" id="streetNum" placeholder="Enter street number"
+                        class="form-control" name="streetNum" required pattern="^[0-9]+[A-Za-z]?">
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="number">Number</label>
+                    <input type="number" [(ngModel)]="number" id="number" placeholder="Enter number"
+                        class="form-control" name="number" required min="1">
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="desc">Short description</label>
+                    <textarea class="form-control" name="desc" id="desc" [(ngModel)]="description" required></textarea>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="image" class="form-label">Add profile image</label>
+                    <input class="form-control" id="image" type="file" (change)="imageUpload($event)">
+                </div>
+
+                <button type="submit" class="btn btn-warning" (click)="submit()"
+                    [disabled]="!myForm.valid || invalidImage == 1">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

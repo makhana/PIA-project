@@ -1,0 +1,573 @@
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase active" data-bs-toggle="tab" data-bs-target="#profile"
+                        href="javascript:void(0)">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" data-bs-toggle="tab" data-bs-target="#objects"
+                        href="javascript:void(0)">My objects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" data-bs-toggle="tab" data-bs-target="#agencies"
+                        href="javascript:void(0)">Agencies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" data-bs-toggle="tab" data-bs-target="#jobs"
+                        href="javascript:void(0)">Jobs</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto ">
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" (click)="logout()" href="javascript:void(0)"><i
+                            class="bi bi-person-fill"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="main-body">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="profile">
+                <div class="row gutters-sm">
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <img src="http://localhost:4000/user/getImage/{{client.image}}" alt="Admin"
+                                        class="rounded-circle" width="150">
+                                    <div class="mt-3">
+                                        <h4>{{client.first_name}} {{client.last_name}}</h4>
+                                        <button class="btn btn-warning" (click)="editProfile()">Edit
+                                            profile</button>
+                                        <button class="btn btn-warning" (click)="changePassword()">Change
+                                            password</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mt-3">
+
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Email</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {{client.email}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Phone</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {{client.phone}}
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gutters-sm" *ngIf="edit">
+                        <div class="">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5>Edit profile information:</h5>
+                                    <div class="card mt-3">
+                                        <ul class="list-group list-group-flush">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <label class="form-label" for="name">First Name</label>
+                                                <input type="text" id="name" name="name" placeholder="Enter first name"
+                                                    [(ngModel)]="first_name">
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <label class="form-label" for="surname">Last Name</label>
+                                                <input type="text" id="surname" name="surname"
+                                                    placeholder="Enter last name" [(ngModel)]="last_name">
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <label class="form-label" for="email">Email</label>
+                                                <input type="email" id="email" name="email" placeholder="Enter email"
+                                                    [(ngModel)]="email">
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <label class="form-label" for="phone">Phone</label>
+                                                <input type="text" [(ngModel)]="phone" id="phone"
+                                                    placeholder="Enter phone number" name="phone"
+                                                    pattern="[+]{0,1}[0-9]+">
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="form-group">
+                                                    <label for="image" class="form-label">Change profile image</label>
+                                                    <input class="form-control" id="image" type="file"
+                                                        (change)="imageUpload($event)">
+                                                </div>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <button class="btn btn-warning" (click)="applyChanges()">Apply
+                                                    changes</button>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="alert alert-warning alert-dismissible fade show"
+                                                    role="alert" *ngIf="message != ''">
+                                                    {{message}}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close" (click)="closeMessage()"></button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="objects">
+                <div class="row" *ngIf="allObjects.length == 0">
+                    <div class="col-mb-6">
+                        <h3 class="display-4">No objects to show</h3>
+                    </div>
+                    <div class="col-mb-6">
+                        <button class="btn btn-warning" width="400" (click)="addObject()">Add object</button>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="allObjects.length !=0">
+                    <div class="col-mb-6">
+                        <h4 class="display-4">Objects list</h4>
+                    </div>
+                    <div class="col-mb-6">
+                        <button class="btn btn-warning" width="400" (click)="addObject()">Add object</button>
+                    </div>
+                </div>
+
+                <div class="row gutters-sm d-flex justify-content-between">
+                    <div class="card col-sm-6">
+                        <div class="card-body" *ngFor="let place of allObjects">
+                            <div class="mb-3" style="height: 5px">
+                                <label><b>Type:</b> {{place.type}}</label>
+                            </div>
+                            <div class="mb-3" style="height: 5px">
+                                <label><b>Address:</b> {{place.address}}</label>
+                            </div>
+                            <div class="mb-3" style="height: 5px">
+                                <label><b>Rooms:</b> {{place.roomNumber}}</label>
+                            </div>
+                            <div class="mb-3" style="height: 5px">
+                                <label><b>Square meters:</b> {{place.size}}</label>
+                            </div>
+                            <div class="card-footer bg-white px-0 ">
+                                <div class="row">
+                                    <div class=" col-md-auto ">
+                                        <button class="btn btn-outline-dark" (click)="showDrawing(place)">Show
+                                            drawing</button>
+                                    </div>
+                                    <div class=" col-md-auto ">
+                                        <button class="btn btn-outline-dark" (click)="changeObject(place)">Add
+                                            changes</button>
+                                    </div>
+                                    <div class=" col-md-auto ">
+                                        <button class="btn btn-outline-dark" (click)="deleteObject(place)">Delete
+                                            object</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 resizable">
+                        <div class="row">
+                            <canvas id="canvas" width="400" height="400"></canvas>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="agencies">
+                <h3 class="display-4" *ngIf="allAgencies.length == 0">No agencies to show</h3>
+                <div class="row gutters-sm" *ngIf="allAgencies.length != 0">
+                    <div class="col-8">
+                        <h4 class="display-4">Available agencies</h4>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <span class="border-warning input-group-text bg-warning text-white"><i
+                                    class="bi bi-search"></i></span>
+                            <input type="text" class="form-control border-warning" style="color:#7a7a7a"
+                                [(ngModel)]="searchParam">
+                            <button class="btn btn-warning text-white" (click)="search()">Search</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row gutters-sm" *ngIf="allAgencies.length != 0">
+                    <table class="table table-hover" *ngIf="searchedAgencies.length == 0 && allAgencies.length != 0">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Profile picture</th>
+                                <th scope="col" (click)="sortData('name')">Name
+                                    <i [ngClass]="{
+                                          'bi bi-arrow-up': sortColumn === 'name' && sortDirection === 1,
+                                          'bi bi-arrow-down': sortColumn === 'name' && sortDirection === -1
+                                        }"></i>
+                                </th>
+                                <th scope="col" (click)="sortData('address')">Address
+                                    <i [ngClass]="{
+                                          'bi bi-arrow-up': sortColumn === 'address' && sortDirection === 1,
+                                          'bi bi-arrow-down': sortColumn === 'address' && sortDirection === -1
+                                        }"></i>
+                                </th>
+                                <th scope="col" (click)="sortData('description')">Description
+                                    <i [ngClass]="{
+                                          'bi bi-arrow-up': sortColumn === 'description' && sortDirection === 1,
+                                          'bi bi-arrow-down': sortColumn === 'description' && sortDirection === -1
+                                        }"></i>
+                                </th>
+                                <th scope="col">Request work</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let agency of allAgencies; let i=index" (click)="lookUpAgency(agency)">
+                                <th scope="row">{{i+1}}</th>
+                                <td>
+                                    <img src="http://localhost:4000/user/getImage/{{agency.image}}" alt="Admin"
+                                        class="rounded-circle" width="50">
+                                </td>
+                                <td>{{agency.name}}</td>
+                                <td>{{agency.address}}</td>
+                                <td>{{agency.description}}</td>
+                                <td>
+                                    <button (click)="requestWork(agency)" class="btn btn-outline-dark">request</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-hover" *ngIf="searchedAgencies.length != 0">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Profile picture</th>
+                                <th scope="col" (click)="sortData('name')">Name
+                                    <i [ngClass]="{
+                                          'bi bi-arrow-up': sortColumn === 'name' && sortDirection === 1,
+                                          'bi bi-arrow-down': sortColumn === 'name' && sortDirection === -1
+                                        }"></i>
+                                </th>
+                                <th scope="col" (click)="sortData('address')">Address
+                                    <i [ngClass]="{
+                                          'bi bi-arrow-up': sortColumn === 'address' && sortDirection === 1,
+                                          'bi bi-arrow-down': sortColumn === 'address' && sortDirection === -1
+                                        }"></i>
+                                </th>
+                                <th scope="col" (click)="sortData('description')">Description
+                                    <i [ngClass]="{
+                                          'bi bi-arrow-up': sortColumn === 'description' && sortDirection === 1,
+                                          'bi bi-arrow-down': sortColumn === 'description' && sortDirection === -1
+                                        }"></i>
+                                </th>
+                                <th scope="col">Request work</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let agency of searchedAgencies; let i=index" (click)="lookUpAgency(agency)">
+                                <th scope="row">{{i+1}}</th>
+                                <td>
+                                    <img src="http://localhost:4000/user/getImage/{{agency.image}}" alt="Admin"
+                                        class="rounded-circle" width="50">
+                                </td>
+                                <td>{{agency.name}}</td>
+                                <td>{{agency.address}}</td>
+                                <td>{{agency.description}}</td>
+                                <td>
+                                    <button (click)="requestWork(agency)" class="btn btn-outline-dark">request</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="jobs">
+                <h3 *ngIf="renovationRequests.length == 0" class="display-4">No renovation requests</h3>
+                <div class="row row-cols-auto" *ngIf="renovationRequests.length != 0">
+                    <div class="col">
+                        <button class="btn btn-warning" (click)="searchJobs('active')">Active jobs</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-warning" (click)="searchJobs('finished')">Finished jobs</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-warning" (click)="searchJobs('requests')">Requested jobs</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-warning" (click)="searchJobs('all')">All jobs</button>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="card" *ngIf="showRenovation == 'active' && searchActive()">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr *ngIf="showRenovation == 'active' && searchActive()">
+                                                <th scope="col">Agency</th>
+                                                <th scope="col">Date Start</th>
+                                                <th scope="col">Date End</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Room number:</th>
+                                                <th scope="col">Size</th>
+                                                <th scope="col">Drawing</th>
+                                                <th scope="col">Cancel job</th>
+                                                <th scope="col">Pay</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let ren of renovationRequests; let i=index">
+                                                <td *ngIf="ren.status == 'active'">{{ren.agencyName}}</td>
+                                                <td *ngIf="ren.status == 'active'">{{ren.dateStart}}</td>
+                                                <td *ngIf="ren.status == 'active'">{{ren.dateEnd}}</td>
+                                                <td *ngIf="ren.status == 'active'">{{ren.place.address}}</td>
+                                                <td *ngIf="ren.status == 'active'">{{ren.place.type}}</td>
+                                                <td *ngIf="ren.status == 'active'">{{ren.place.roomNumber}}</td>
+                                                <td *ngIf="ren.status == 'active'">{{ren.place.size}}</td>
+                                                <td *ngIf="ren.status == 'active'">
+                                                    <button class="btn btn-warning" *ngIf="ren.status == 'active'"
+                                                        (click)="showDrawingJob(ren.place)">Show Drawing</button>
+                                                </td>
+                                                <td *ngIf="ren.status == 'active'">
+                                                    <button class="btn btn-warning" *ngIf="ren.status == 'active'"
+                                                        (click)="cancel()">Cancel</button>
+                                                    <form class="was-validated" #myForm="ngForm">
+                                                        <label for="reason" class="form-label"
+                                                            *ngIf="cancelBool">Reason:</label>
+                                                        <input type="text" [(ngModel)]="reason" name="reason"
+                                                            id="reason" *ngIf="cancelBool" required>
+                                                        <button class="btn btn-warning" *ngIf="cancelBool"
+                                                            (click)="submit(ren)"
+                                                            [disabled]="!myForm.valid">Submit</button>
+                                                    </form>
+
+                                                </td>
+                                                <td *ngIf="allGreen(ren.place) && ren.status == 'active'">
+                                                    <button class="btn btn-warning" *ngIf="ren.status == 'active'"
+                                                        (click)="pay(ren.id)">Pay</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" *ngIf="showRenovation == 'active' && !searchActive()">
+                            <div class="card-body">
+                                <h4 class="display-4">No active jobs</h4>
+                            </div>
+                        </div>
+                        <div class="card" *ngIf="showRenovation == 'all' && renovationRequests.length != 0">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Agency</th>
+                                                <th scope="col">Date Start</th>
+                                                <th scope="col">Date End</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Room number:</th>
+                                                <th scope="col">Size</th>
+                                                <th scope="col">Drawing</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let ren of renovationRequests; let i=index">
+                                                <td>{{ren.agencyName}}</td>
+                                                <td>{{ren.dateStart}}</td>
+                                                <td>{{ren.dateEnd}}</td>
+                                                <td>{{ren.place.address}}</td>
+                                                <td>{{ren.place.type}}</td>
+                                                <td>{{ren.place.roomNumber}}</td>
+                                                <td>{{ren.place.size}}</td>
+                                                <td>
+                                                    <button class="btn btn-warning"
+                                                        (click)="showDrawingJob(ren.place)">Show Drawing</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" *ngIf="showRenovation == 'finished' && searchFinished()">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr *ngIf="showRenovation == 'finished' && searchFinished()">
+                                                <th scope="col">Agency</th>
+                                                <th scope="col">Date Start</th>
+                                                <th scope="col">Date End</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Room number:</th>
+                                                <th scope="col">Size</th>
+                                                <th scope="col">Drawing</th>
+                                                <th scope="col">Leave review</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let ren of renovationRequests; let i=index">
+                                                <td *ngIf="ren.status == 'finished'">{{ren.agencyName}}</td>
+                                                <td *ngIf="ren.status == 'finished'">{{ren.dateStart}}</td>
+                                                <td *ngIf="ren.status == 'finished'">{{ren.dateEnd}}</td>
+                                                <td *ngIf="ren.status == 'finished'">{{ren.place.address}}</td>
+                                                <td *ngIf="ren.status == 'finished'">{{ren.place.type}}</td>
+                                                <td *ngIf="ren.status == 'finished'">{{ren.place.roomNumber}}</td>
+                                                <td *ngIf="ren.status == 'finished'">{{ren.place.size}}</td>
+                                                <td *ngIf="ren.status == 'finished'">
+                                                    <button class="btn btn-warning"
+                                                        (click)="showDrawingJob(ren.place)">Show Drawing</button>
+                                                </td>
+                                                <td *ngIf="ren.status == 'finished'">
+                                                    <button class="btn btn-warning"
+                                                        (click)="leaveReview(ren)">Review</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" *ngIf="showRenovation == 'finished' && !searchFinished()">
+                            <div class="card-body">
+                                <h4 class="display-4">No finished jobs</h4>
+                            </div>
+                        </div>
+                        <div class="card" *ngIf="showRenovation == 'requests' && searchRequests()">
+                            <div class="card-body">
+                                <div class="table-responsive">
+
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr *ngIf="showRenovation == 'requests' && searchRequests()">
+                                                <th scope="col">Agency</th>
+                                                <th scope="col">Date Start</th>
+                                                <th scope="col">Date End</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Room number:</th>
+                                                <th scope="col">Size</th>
+                                                <th scope="col">Drawing</th>
+                                                <th scope="col" *ngIf="searchOffer()">Offer</th>
+                                                <th scope="col" *ngIf="searchOffer()">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let ren of renovationRequests; let i=index">
+                                                <td *ngIf="ren.status == 'pending' || ren.status == 'declined' || ren.status == 'accepted' "
+                                                    [class.red]="ren.status == 'declined'"
+                                                    [class.green]="ren.status == 'accepted'">
+                                                    {{ren.agencyName}}</td>
+                                                <td *ngIf="ren.status == 'pending' || ren.status == 'declined' || ren.status == 'accepted' "
+                                                    [class.red]="ren.status == 'declined'"
+                                                    [class.green]="ren.status == 'accepted'">
+                                                    {{ren.dateStart}}</td>
+                                                <td *ngIf="ren.status == 'pending' || ren.status == 'declined' || ren.status == 'accepted' "
+                                                    [class.red]="ren.status == 'declined'"
+                                                    [class.green]="ren.status == 'accepted'">
+                                                    {{ren.dateEnd}}</td>
+                                                <td *ngIf="ren.status == 'pending' || ren.status == 'declined' || ren.status == 'accepted' "
+                                                    [class.red]="ren.status == 'declined'"
+                                                    [class.green]="ren.status == 'accepted'">
+                                                    {{ren.place.address}}</td>
+                                                <td *ngIf="ren.status == 'pending' || ren.status == 'declined' || ren.status == 'accepted' "
+                                                    [class.red]="ren.status == 'declined'"
+                                                    [class.green]="ren.status == 'accepted'">
+                                                    {{ren.place.type}}</td>
+                                                <td *ngIf="ren.status == 'pending' || ren.status == 'declined' || ren.status == 'accepted' "
+                                                    [class.red]="ren.status == 'declined'"
+                                                    [class.green]="ren.status == 'accepted'">
+                                                    {{ren.place.roomNumber}}</td>
+                                                <td *ngIf="ren.status == 'pending' || ren.status == 'declined' || ren.status == 'accepted' "
+                                                    [class.red]="ren.status == 'declined'"
+                                                    [class.green]="ren.status == 'accepted'">
+                                                    {{ren.place.size}}</td>
+                                                <td
+                                                    *ngIf="ren.status == 'pending' || ren.status == 'declined' || ren.status == 'accepted' ">
+                                                    <button class="btn btn-warning"
+                                                        (click)="showDrawingJob(ren.place)">Show Drawing</button>
+                                                </td>
+                                                <td *ngIf="ren.status == 'accepted'"
+                                                    [class.green]="ren.status == 'accepted'">
+                                                    {{ren.offer}}</td>
+
+                                                <td *ngIf="ren.status == 'accepted'">
+                                                    <button class="btn btn-warning" (click)="acceptOffer(ren.id)">Accept
+                                                        offer</button>
+                                                    <button class="btn btn-warning"
+                                                        (click)="declineOffer(ren.id)">Decline offer</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" *ngIf="showRenovation == 'requests' && !searchRequests()">
+                            <div class="card-body">
+                                <h4 class="display-4">No pending requests</h4>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4 resizable">
+                        <div class="row">
+                            <canvas id="canvasJob" width="400" height="400"></canvas>
+                        </div>
+                        <div class="row">
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                                *ngIf="message != ''">
+                                {{message}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                                    (click)="closeMessage()"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

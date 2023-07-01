@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+    </div>
+</nav>
+<div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="message != ''">
+    {{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="closeMessage()"></button>
+</div>
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh">
+    <div class="row">
+        <div>
+            <form class="was-validated" #myForm="ngForm">
+                <h2 class="display-3">Log in</h2>
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" [(ngModel)]="username" id="username" placeholder="Enter username"
+                        class="form-control" name="username" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" [(ngModel)]="password" id="password" placeholder="Enter password"
+                        class="form-control" name="password" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <button type="submit" class="btn btn-warning" (click)="login()"
+                    [disabled]="!myForm.valid">Login</button>
+
+            </form>
+        </div>
+    </div>
+</div>

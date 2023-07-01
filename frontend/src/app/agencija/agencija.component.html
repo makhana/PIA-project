@@ -1,0 +1,330 @@
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase active" data-bs-toggle="tab" data-bs-target="#profile"
+                        href="javascript:void(0)">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" data-bs-toggle="tab" data-bs-target="#workers"
+                        href="javascript:void(0)">Workers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" data-bs-toggle="tab" data-bs-target="#jobs"
+                        href="javascript:void(0)">Jobs</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto ">
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" (click)="logout()" href="javascript:void(0)"><i
+                            class="bi bi-person-fill"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="main-body">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="profile">
+                <div class="row gutters-sm">
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <img src="http://localhost:4000/user/getImage/{{agency.image}}" alt="Admin"
+                                        class="rounded-circle" width="150">
+                                    <div class="mt-3">
+                                        <h4>{{agency.name}}</h4>
+                                        <p class="text-secondary mb-1">{{agency.description}}</p>
+                                        <button class="btn btn-warning" (click)="editProfile()">Edit
+                                            profile</button>
+                                        <button class="btn btn-warning" (click)="changePassword()">Change
+                                            password</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mt-3">
+
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Email</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {{agency.email}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Phone</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {{agency.phone}}
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gutters-sm" *ngIf="edit">
+                        <div class="">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5>Edit profile information:</h5>
+                                    <div class="card mt-3">
+                                        <ul class="list-group list-group-flush">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <label class="form-label" for="name">Name</label>
+                                                <input type="text" id="name" name="name" placeholder="Enter name"
+                                                    [(ngModel)]="name">
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <label class="form-label" for="email">Email</label>
+                                                <input type="email" id="email" name="email" placeholder="Enter email"
+                                                    [(ngModel)]="email">
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <label class="form-label" for="phone">Phone</label>
+                                                <input type="text" [(ngModel)]="phone" id="phone"
+                                                    placeholder="Enter phone number" name="phone"
+                                                    pattern="[+]{0,1}[0-9]+">
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <label class="form-label" for="address">Address</label>
+                                                <input type="text" [(ngModel)]="address" id="address"
+                                                    placeholder="Enter address" name="address">
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <label class="form-label" for="description">Description</label>
+                                                <textarea id="description" name="description"
+                                                    placeholder="Enter description"
+                                                    [(ngModel)]="description"></textarea>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="form-group">
+                                                    <label for="image" class="form-label">Change profile image</label>
+                                                    <input class="form-control" id="image" type="file"
+                                                        (change)="imageUpload($event)">
+                                                </div>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <button class="btn btn-warning" (click)="applyChanges()">Apply
+                                                    changes</button>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="alert alert-warning alert-dismissible fade show"
+                                                    role="alert" *ngIf="message != ''">
+                                                    {{message}}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close" (click)="closeMessage()"></button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="workers">
+                <div class="row row-cols-auto">
+                    <div class="col">
+                        <button class="btn btn-warning" (click)="requestWorker()">Request more workers</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-warning" (click)="addWorker()"
+                            [disabled]="numberOfWorkers == numberOfWorkersAllowed">Add worker</button>
+                    </div>
+                    <div class="col d-flex align-items-center">
+                        <label class="form-label"> Number of workers allowed: {{numberOfWorkersAllowed}}</label>
+                    </div>
+                </div>
+
+                <table class="table table-hover" *ngIf="allWorkers.length != 0">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Surname</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Specialization</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let w of allWorkers; let i=index">
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{w.name}}</td>
+                            <td>{{w.surname}}</td>
+                            <td>{{w.email}}</td>
+                            <td>{{w.phone}}</td>
+                            <td>{{w.specialization}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane fade" id="jobs">
+                <h3 class="display-4" *ngIf="allJobRequests.length != 0 && searchPending()">Job requests</h3>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="message != ''">
+                    {{message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                        (click)="closeMessage()"></button>
+                </div>
+                <div class="row row-cols-auto">
+                    <div class="col">
+                        <button class="btn btn-warning" (click)="searchJobs('active')">Active jobs</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-warning" (click)="searchJobs('all')">Pending jobs</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="card"
+                            *ngIf="allJobRequests.length != 0 && searchPending() && showRenovation == 'all'">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Start date</th>
+                                                <th scope="col">End date</th>
+                                                <th scope="col">Client name</th>
+                                                <th scope="col">Client surname</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Room number</th>
+                                                <th scope="col">Size</th>
+                                                <th scope="col">Drawing</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let job of allJobRequests; let i=index">
+                                                <td *ngIf="job.status == 'pending'">{{job.dateStart}}</td>
+                                                <td *ngIf="job.status == 'pending'">{{job.dateEnd}}</td>
+                                                <td *ngIf="job.status == 'pending'">{{job.clientName}}</td>
+                                                <td *ngIf="job.status == 'pending'">{{job.clientSurname}}</td>
+                                                <td *ngIf="job.status == 'pending'">{{job.place.type}}</td>
+                                                <td *ngIf="job.status == 'pending'">{{job.place.address}}</td>
+                                                <td *ngIf="job.status == 'pending'">{{job.place.roomNumber}}</td>
+                                                <td *ngIf="job.status == 'pending'">{{job.place.size}}</td>
+                                                <td *ngIf="job.status == 'pending'">
+                                                    <button class="btn btn-warning"
+                                                        (click)="showDrawing(job.place)">Show Drawing</button>
+                                                </td>
+                                                <td *ngIf="job.status == 'pending'">
+                                                    <div class="row">
+                                                        <button class="btn btn-warning" (click)="accept(job.id)">Accept
+                                                            request</button>
+                                                        <input type="number" [(ngModel)]="offer" name="offer">
+                                                    </div>
+                                                    <div class="row">
+                                                        <button class="btn btn-warning"
+                                                            (click)="decline(job.id)">Decline
+                                                            request</button>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card"
+                            *ngIf="(allJobRequests.length == 0 || !searchPending()) && showRenovation == 'all'">
+                            <div class="card-body">
+                                <h3 class="display-4">No pending job requests</h3>
+                            </div>
+                        </div>
+
+                        <div class="card"
+                            *ngIf="allJobRequests.length != 0 && showRenovation == 'active' && searchActive()">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Start date</th>
+                                                <th scope="col">End date</th>
+                                                <th scope="col">Client name</th>
+                                                <th scope="col">Client surname</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Room number</th>
+                                                <th scope="col">Size</th>
+                                                <th scope="col">Drawing</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let job of allJobRequests; let i=index">
+                                                <td *ngIf="job.status == 'active'">{{job.dateStart}}</td>
+                                                <td *ngIf="job.status == 'active'">{{job.dateEnd}}</td>
+                                                <td *ngIf="job.status == 'active'">{{job.clientName}}</td>
+                                                <td *ngIf="job.status == 'active'">{{job.clientSurname}}</td>
+                                                <td *ngIf="job.status == 'active'">{{job.place.type}}</td>
+                                                <td *ngIf="job.status == 'active'">{{job.place.address}}</td>
+                                                <td *ngIf="job.status == 'active'">{{job.place.roomNumber}}</td>
+                                                <td *ngIf="job.status == 'active'">{{job.place.size}}</td>
+                                                <td *ngIf="job.status == 'active'">
+                                                    <button class="btn btn-warning"
+                                                        (click)="showDrawing(job.place)">Show Drawing</button>
+                                                </td>
+                                                <td *ngIf="job.status == 'active'">
+                                                    <button class="btn btn-warning" (click)="work(job)"
+                                                        [disabled]="allGreen(job)">Work</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card"
+                            *ngIf="allJobRequests.length == 0 || (showRenovation == 'active' && !searchActive())">
+                            <div class="card-body">
+                                <h3 class="display-4">No active jobs</h3>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4 resizable">
+                        <div class="row">
+                            <canvas id="canvas" width="400" height="400"></canvas>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

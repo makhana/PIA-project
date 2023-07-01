@@ -1,0 +1,79 @@
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto ">
+                <li class="nav-item">
+                    <button class="btn btn-danger" (click)="back()"><i class="bi bi-box-arrow-left"></i> Back</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="main-body">
+        <div class="row gutters-sm">
+            <div class="">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5>Edit profile information:</h5>
+                        <div class="card mt-3">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <label class="form-label" for="name">Name</label>
+                                    <input type="text" id="name" name="name" placeholder="Enter name"
+                                        [(ngModel)]="name">
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="email" id="email" name="email" placeholder="Enter email"
+                                        [(ngModel)]="email">
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <label class="form-label" for="phone">Phone</label>
+                                    <input type="text" [(ngModel)]="phone" id="phone" placeholder="Enter phone number"
+                                        name="phone" pattern="[+]{0,1}[0-9]+">
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <label class="form-label" for="address">Address</label>
+                                    <input type="text" [(ngModel)]="address" id="address" placeholder="Enter address"
+                                        name="address">
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <label class="form-label" for="description">Description</label>
+                                    <textarea id="description" name="description" placeholder="Enter description"
+                                        [(ngModel)]="description"></textarea>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <div class="form-group">
+                                        <label for="image" class="form-label">Change profile image</label>
+                                        <input class="form-control" id="image" type="file"
+                                            (change)="imageUpload($event)">
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <button class="btn btn-warning" (click)="applyChanges()">Apply
+                                        changes</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                                        *ngIf="message != ''">
+                                        {{message}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close" (click)="closeMessage()"></button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

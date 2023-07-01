@@ -1,0 +1,131 @@
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+  <div class="container">
+    <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="mx-auto my-3 d-lg-none d-sm-block d-xs-block">
+      <div class="input-group">
+        <span class="border-warning input-group-text bg-warning text-white"><i class="bi bi-search"
+            for="login"></i></span>
+        <input type="text" class="form-control border-warning" style="color:#7a7a7a" [(ngModel)]="searchParam"
+          name="search">
+        <button class="btn btn-warning text-white" (click)="search()">Search</button>
+      </div>
+    </div>
+    <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+      <div class="ms-auto d-none d-lg-block">
+        <div class="input-group">
+          <span class="border-warning input-group-text bg-warning text-white"><i class="bi bi-search"></i></span>
+          <input type="text" class="form-control border-warning" style="color:#7a7a7a" [(ngModel)]="searchParam">
+          <button class="btn btn-warning text-white" (click)="search()">Search</button>
+        </div>
+      </div>
+      <!-- <ul class="navbar-nav ms-auto ">
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-uppercase active" aria-current="page" data-bs-toggle="tab" data-bs-target="#home"
+            href="javascript:void(0)">Home</a>
+        </li>
+      </ul> -->
+      <ul class="navbar-nav ms-auto ">
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-uppercase" (click)="register()" href="javascript:void(0)"><i
+              class="bi bi-person-circle"></i> Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-uppercase" (click)="login()" href="javascript:void(0)"><i
+              class="bi bi-person-fill"></i> Login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="main-body">
+    <div class="tab-content">
+      <div class="tab-pane fade show active">
+        <h3 class="display-4" *ngIf="allAgencies.length == 0">No agencies to show</h3>
+        <table class="table table-hover" *ngIf="searchedAgencies.length == 0 && allAgencies.length !=0">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Profile picture</th>
+              <th scope="col" (click)="sortData('name')">Name
+                <i [ngClass]="{
+                        'bi bi-arrow-up': sortColumn === 'name' && sortDirection === 1,
+                        'bi bi-arrow-down': sortColumn === 'name' && sortDirection === -1
+                      }"></i>
+              </th>
+              <th scope="col" (click)="sortData('address')">Address
+                <i [ngClass]="{
+                        'bi bi-arrow-up': sortColumn === 'address' && sortDirection === 1,
+                        'bi bi-arrow-down': sortColumn === 'address' && sortDirection === -1
+                      }"></i>
+              </th>
+              <th scope="col" (click)="sortData('description')">Description
+                <i [ngClass]="{
+                        'bi bi-arrow-up': sortColumn === 'description' && sortDirection === 1,
+                        'bi bi-arrow-down': sortColumn === 'description' && sortDirection === -1
+                      }"></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let agency of allAgencies; let i=index" (click)="lookUpAgency(agency)">
+              <th scope="row">{{i+1}}</th>
+              <td>
+                <img src="http://localhost:4000/user/getImage/{{agency.image}}" alt="Admin" class="rounded-circle"
+                  width="50">
+              </td>
+              <td>{{agency.name}}</td>
+              <td>{{agency.address}}</td>
+              <td>{{agency.description}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-hover" *ngIf="searchedAgencies.length != 0">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Profile picture</th>
+              <th scope="col" (click)="sortData('name')">Name
+                <i [ngClass]="{
+                        'bi bi-arrow-up': sortColumn === 'name' && sortDirection === 1,
+                        'bi bi-arrow-down': sortColumn === 'name' && sortDirection === -1
+                      }"></i>
+              </th>
+              <th scope="col" (click)="sortData('address')">Address
+                <i [ngClass]="{
+                        'bi bi-arrow-up': sortColumn === 'address' && sortDirection === 1,
+                        'bi bi-arrow-down': sortColumn === 'address' && sortDirection === -1
+                      }"></i>
+              </th>
+              <th scope="col" (click)="sortData('description')">Description
+                <i [ngClass]="{
+                        'bi bi-arrow-up': sortColumn === 'description' && sortDirection === 1,
+                        'bi bi-arrow-down': sortColumn === 'description' && sortDirection === -1
+                      }"></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let agency of searchedAgencies; let i=index" (click)="lookUpAgency(agency)">
+              <th scope="row">{{i+1}}</th>
+              <td>
+                <img src="http://localhost:4000/user/getImage/{{agency.image}}" alt="Admin" class="rounded-circle"
+                  width="50">
+              </td>
+              <td>{{agency.name}}</td>
+              <td>{{agency.address}}</td>
+              <td>{{agency.description}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm" *ngIf="loginUser==0">
+    <div class="container">
+        <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto ">
+                <li class="nav-item">
+                    <button class="btn btn-danger" (click)="backHome()"><i class="bi bi-box-arrow-left"></i>
+                        Back</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm" *ngIf="loginUser==1">
+    <div class="container">
+        <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto ">
+                <li class="nav-item">
+                    <button class="btn btn-danger" (click)="backClient()"><i class="bi bi-box-arrow-left"></i>
+                        Back</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="main-body">
+
+        <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="http://localhost:4000/user/getImage/{{agency.image}}" alt="Admin"
+                                class="rounded-circle" width="150">
+                            <div class="mt-3">
+                                <h4>{{agency.name}}</h4>
+                                <p class="text-secondary mb-1">{{agency.description}}</p>
+                            </div>
+                            <hr>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{agency.email}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Phone</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{agency.phone}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Address</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{agency.address}}
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h3 class="display-4">Comments</h3>
+                <div class="card mb-3">
+                    <div class="card-body" *ngFor="let com of allComments; let i=index">
+                        <h6 class="d-flex align-items-center mb-3" *ngIf="loginUser==1">
+                            <img src="http://localhost:4000/user/getImage/{{clientsOfComments[i].image}}"
+                                class="rounded-circle" width="50">{{clientsOfComments[i].first_name}}
+                            {{clientsOfComments[i].last_name}}
+                        </h6>
+                        <h6 class="d-flex align-items-center mb-3" *ngIf="loginUser==0">
+                            <img src="http://localhost:4000/user/getImage/default.jpg" class="rounded-circle"
+                                width="50">{{com.client}}
+                        </h6>
+                        <div class="mb-3" style="height: 5px">
+                            <label>{{com.comment}}</label>
+                        </div>
+                        <div class="card-footer bg-white px-0 ">
+                            <div class="row">
+                                <div class=" col-md-auto ">
+                                    <a href="#" class="btn btn-outlined btn-black text-muted bg-transparent"
+                                        data-wow-delay="0.7s"><i class="bi bi-star-half"></i><small>RATING:
+                                            {{com.rating}}</small></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

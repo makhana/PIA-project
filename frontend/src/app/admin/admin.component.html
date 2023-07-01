@@ -1,0 +1,264 @@
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase active" data-bs-toggle="tab" data-bs-target="#clients"
+                        href="javascript:void(0)">Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" data-bs-toggle="tab" data-bs-target="#agencies"
+                        href="javascript:void(0)">Agencies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" data-bs-toggle="tab" data-bs-target="#registration"
+                        href="javascript:void(0)">Registrations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" data-bs-toggle="tab" data-bs-target="#jobs"
+                        href="javascript:void(0)">Jobs</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto ">
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" (click)="logout()" href="javascript:void(0)"><i
+                            class="bi bi-person-fill"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="main-body">
+        <div class="tab-content">
+
+            <div class="tab-pane fade show active" id="clients">
+                <div class="row gutters-sm resizable">
+                    <table class="table table-hover" *ngIf="allClients.length != 0">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Profile picture</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Password</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Surname</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Update client</th>
+                                <th scope="col">Delete client</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let client of allClients; let i=index">
+                                <th scope="row">{{i+1}}</th>
+                                <td>
+                                    <img src="http://localhost:4000/user/getImage/{{client.image}}" alt="Admin"
+                                        class="rounded-circle" width="50">
+                                </td>
+                                <td>{{client.username}}</td>
+                                <td>{{client.password}}</td>
+                                <td>{{client.first_name}}</td>
+                                <td>{{client.last_name}}</td>
+                                <td>{{client.email}}</td>
+                                <td>{{client.phone}}</td>
+                                <td>
+                                    <button class="btn btn-warning" (click)="updateClient(client)">update</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning" (click)="deleteClient(client)">delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row gutters-sm">
+                    <button class="btn btn-warning" (click)="addClient()">Add New Client</button>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="agencies">
+                <div class="row gutters-sm resizable">
+                    <table class="table table-hover" *ngIf="allAgencies.length != 0">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Profile picture</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Password</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Desccription</th>
+                                <th scope="col">Update agency</th>
+                                <th scope="col">Delete agency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let agency of allAgencies; let i=index" (click)="lookUpAgency(agency)">
+                                <th scope="row">{{i+1}}</th>
+                                <td>
+                                    <img src="http://localhost:4000/user/getImage/{{agency.image}}" alt="Admin"
+                                        class="rounded-circle" width="50">
+                                </td>
+                                <td>{{agency.username}}</td>
+                                <td>{{agency.password}}</td>
+                                <td>{{agency.name}}</td>
+                                <td>{{agency.email}}</td>
+                                <td>{{agency.phone}}</td>
+                                <td>{{agency.address}}</td>
+                                <td>{{agency.idNumber}}</td>
+                                <td>{{agency.description}}</td>
+                                <td>
+                                    <button class="btn btn-warning" (click)="updateAgency(agency)">update</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning" (click)="deleteAgency(agency)">delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row gutters-sm">
+                    <button class="btn btn-warning" (click)="addAgency()">Add New Agency</button>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="registration">
+                <div class="row gutters-sm resizable">
+                    <h4 class="display-4" *ngIf="allRegistrationRequests.length == 0">No registration requests</h4>
+                    <h4 class="display-4" *ngIf="checkClient()">Clients:</h4>
+                    <table class="table table-hover" *ngIf="checkClient()">
+                        <thead>
+                            <tr>
+                                <th scope="col">Profile picture</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Password</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Surname</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Accept</th>
+                                <th scope="col">Decline</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let req of allRegistrationRequests; let i=index">
+                                <td *ngIf="req.userType=='client'">
+                                    <img src="http://localhost:4000/user/getImage/{{req.image}}" alt="Admin"
+                                        class="rounded-circle" width="50">
+                                </td>
+                                <td *ngIf="req.userType=='client'">{{req.username}}</td>
+                                <td *ngIf="req.userType=='client'">{{req.password}}</td>
+                                <td *ngIf="req.userType=='client'">{{req.first_name}}</td>
+                                <td *ngIf="req.userType=='client'">{{req.last_name}}</td>
+                                <td *ngIf="req.userType=='client'">{{req.email}}</td>
+                                <td *ngIf="req.userType=='client'">{{req.phone}}</td>
+                                <td *ngIf="req.userType=='client'">
+                                    <button class="btn btn-warning" (click)="acceptClient(req)">accept</button>
+                                </td>
+                                <td *ngIf="req.userType=='client'">
+                                    <button class="btn btn-warning"
+                                        (click)="declineClientRegister(req)">decline</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 class="display-4" *ngIf="checkAgency()">Agencies:</h4>
+                    <table class="table table-hover" *ngIf="checkAgency()">
+                        <thead>
+                            <tr>
+                                <th scope="col">Profile picture</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Password</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Agency name</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Accept</th>
+                                <th scope="col">Decline</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let req of allRegistrationRequests; let i=index">
+                                <td *ngIf="req.userType=='agency'">
+                                    <img src="http://localhost:4000/user/getImage/{{req.image}}" alt="Admin"
+                                        class="rounded-circle" width="50">
+                                </td>
+                                <td *ngIf="req.userType=='agency'">{{req.username}}</td>
+                                <td *ngIf="req.userType=='agency'">{{req.password}}</td>
+                                <td *ngIf="req.userType=='agency'">{{req.email}}</td>
+                                <td *ngIf="req.userType=='agency'">{{req.phone}}</td>
+                                <td *ngIf="req.userType=='agency'">{{req.name}}</td>
+                                <td *ngIf="req.userType=='agency'">{{req.address}}</td>
+                                <td *ngIf="req.userType=='agency'">{{req.idNumber}}</td>
+                                <td *ngIf="req.userType=='agency'">{{req.description}}</td>
+                                <td *ngIf="req.userType=='agency'">
+                                    <button class="btn btn-warning" (click)="acceptAgency(req)">accept</button>
+                                </td>
+                                <td *ngIf="req.userType=='agency'">
+                                    <button class="btn btn-warning"
+                                        (click)="declineAgencyRegister(req)">decline</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="jobs">
+                <div class="row gutters-sm resizable">
+                    <h4 class="display-4" *ngIf="allJobs.length == 0">No job requests</h4>
+                    <table class="table table-hover" *ngIf="allJobs.length != 0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Agency</th>
+                                <th scope="col">Client</th>
+                                <th scope="col">Place</th>
+                                <th scope="col">Start date</th>
+                                <th scope="col">End date</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Cancellation Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let job of allJobs">
+                                <td>{{job.agency}}</td>
+                                <td>{{job.client}}</td>
+                                <td>{{job.idPlace}}</td>
+                                <td>{{job.dateStart}}</td>
+                                <td>{{job.dateEnd}}</td>
+                                <td>{{job.status}}</td>
+                                <td>
+                                    <div class="row">
+                                        {{returnReason(job)}}
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-mb-3">
+                                            <button class="btn btn-warning"
+                                                *ngIf="checkCancellation(job)" (click)="acceptCancellation(job)">accept</button>
+                                            <button class="btn btn-warning"
+                                                *ngIf="checkCancellation(job)" (click)="declineCancellation(job)">decline</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

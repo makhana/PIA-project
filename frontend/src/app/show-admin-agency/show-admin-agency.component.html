@@ -1,0 +1,96 @@
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand"><i class="bi bi-houses-fill"></i> <strong>RENOVATION</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase active" data-bs-toggle="tab" data-bs-target="#workers"
+                        href="javascript:void(0)">Workers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 text-uppercase" data-bs-toggle="tab" data-bs-target="#workerReq"
+                        href="javascript:void(0)">Worker requests</a>
+                </li>
+            </ul>
+        </div>
+        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto ">
+                <li class="nav-item">
+                    <button class="btn btn-danger" (click)="back()"><i class="bi bi-box-arrow-left"></i> Back</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="main-body">
+        <div class="tab-content">
+
+            <div class="tab-pane fade show active" id="workers">
+                <div class="row gutters-sm resizable">
+                    <h4 class="display-4" *ngIf="allWorkers.length == 0">No workers in this agency</h4>
+                    <table class="table table-hover" *ngIf="allWorkers.length != 0">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Surname</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Specialization</th>
+                                <th scope="col">Update worker</th>
+                                <th scope="col">Delete worker</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let worker of allWorkers; let i=index">
+                                <th scope="row">{{i+1}}</th>
+                                <td>{{worker.name}}</td>
+                                <td>{{worker.surname}}</td>
+                                <td>{{worker.email}}</td>
+                                <td>{{worker.phone}}</td>
+                                <td>{{worker.specialization}}</td>
+                                <td>
+                                    <button class="btn btn-warning" (click)="updateWorker(worker)">update</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning" (click)="deleteWorker(worker)">delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row gutters-sm">
+                    <button class="btn btn-warning" (click)="addWorker()">Add New Worker</button>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="workerReq">
+                <div class="row gutters-sm">
+                    <h3 class="display-4" *ngIf="workerRequest == null">No worker requests</h3>
+                    <div class="card h-100" *ngIf="workerRequest != null">
+                        <div class="card-body">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Agency: {{workerRequest.agency}}</h6>
+                            </div>
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Number of Workers: {{workerRequest.number}}</h6>
+                            </div>
+                            <div class="col-sm-3">
+                                <button class="btn btn-warning" (click)="accept()">accept</button>
+                                <button class="btn btn-warning" (click)="decline()">decline</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

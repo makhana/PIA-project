@@ -1,0 +1,12 @@
+.red{
+    color:red;
+}
+
+.green{
+    color:green;
+}
+
+.resizable{
+    resize: horizontal;
+    overflow: auto;
+}

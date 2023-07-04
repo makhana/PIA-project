@@ -16,8 +16,8 @@ export class UserController {
     loginClient = (req: express.Request, res: express.Response) => {
         let username = req.body.username;
         let password = req.body.password;
-        
-        ClientModel.findOne({'username': username, 'password': password }, (err, user) => {
+
+        ClientModel.findOne({ 'username': username, 'password': password }, (err, user) => {
             if (err) console.log(err);
             else res.json(user)
         })
@@ -54,8 +54,8 @@ export class UserController {
 
         let name = req.body.name;
         let address = req.body.address;
-    
-        
+
+
         let idNumber = req.body.idNumber;
         let description = req.body.description;
         let userType = req.body.userType;
@@ -63,17 +63,17 @@ export class UserController {
         let image = req.body.image;
 
         RegistrationModel.find({}, (err, resp) => {
-            if(err) console.log(err);
+            if (err) console.log(err);
             else {
                 let max_id = 0;
-                for(let r of resp){
-                    if(r['id'] > max_id){
+                for (let r of resp) {
+                    if (r['id'] > max_id) {
                         max_id = r['id'];
                     }
                 }
 
                 let reg = new RegistrationModel({
-                    id: (max_id+1),
+                    id: (max_id + 1),
                     username: username,
                     password: password,
                     phone: phone,
@@ -88,16 +88,16 @@ export class UserController {
                     image: image,
                     state: "pending",
                 })
-        
-                reg.save((err, resp)=> {
-                    if(err) console.log(err);
-                    else res.json({'message': 'registration added'});
+
+                reg.save((err, resp) => {
+                    if (err) console.log(err);
+                    else res.json({ 'message': 'registration added' });
                 })
 
             }
         })
 
-        
+
     }
 
     getAllClients = (req: express.Request, res: express.Response) => {
@@ -128,7 +128,7 @@ export class UserController {
     //     const fs = require('fs')
     //     try{
     //         fs.readFile('uploads/'+ req.params.id, function(err, data) {
-                
+
     //           if (err) throw err;
     //           else {
     //             res.writeHead(200, {'Content-Type': 'image/jpeg'});
@@ -144,7 +144,7 @@ export class UserController {
     getClient = (req: express.Request, res: express.Response) => {
         let username = req.body.username;
 
-        ClientModel.findOne({'username': username}, (err, client) => {
+        ClientModel.findOne({ 'username': username }, (err, client) => {
             if (err) console.log(err);
             else res.json(client)
         })
@@ -153,7 +153,7 @@ export class UserController {
     getAgency = (req: express.Request, res: express.Response) => {
         let username = req.body.username;
 
-        AgencyModel.findOne({'username': username}, (err, agency) => {
+        AgencyModel.findOne({ 'username': username }, (err, agency) => {
             if (err) console.log(err);
             else res.json(agency)
         })
@@ -167,30 +167,34 @@ export class UserController {
         let phone = req.body.phone;
         let image = req.body.image;
 
-        if(image == ""){
-            ClientModel.updateOne({'username': username}, {$set: {
-                'first_name': first_name,
-                'last_name': last_name,
-                'email': email,
-                'phone': phone,
-            }}, (err, resp)=> {
-                if(err) console.log(err);
-                else res.json({'message': 'client profile updated'})
+        if (image == "") {
+            ClientModel.updateOne({ 'username': username }, {
+                $set: {
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'email': email,
+                    'phone': phone,
+                }
+            }, (err, resp) => {
+                if (err) console.log(err);
+                else res.json({ 'message': 'client profile updated' })
             })
         } else {
-            ClientModel.updateOne({'username': username}, {$set: {
-                'first_name': first_name,
-                'last_name': last_name,
-                'email': email,
-                'phone': phone,
-                'image': image,
-            }}, (err, resp)=> {
-                if(err) console.log(err);
-                else res.json({'message': 'client profile updated'})
+            ClientModel.updateOne({ 'username': username }, {
+                $set: {
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'email': email,
+                    'phone': phone,
+                    'image': image,
+                }
+            }, (err, resp) => {
+                if (err) console.log(err);
+                else res.json({ 'message': 'client profile updated' })
             })
         }
 
-        
+
     }
 
     updateAgencyProfile = (req: express.Request, res: express.Response) => {
@@ -202,39 +206,43 @@ export class UserController {
         let address = req.body.address;
         let description = req.body.description;
 
-        if(image == ""){
-            AgencyModel.updateOne({'username': username}, {$set: {
-                'phone': phone,
-                'email': email,
-                'name': name,
-                'address': address,
-                'description': description,
-            }}, (err, resp)=> {
-                if(err) console.log(err);
-                else res.json({'message': 'agency profile updated'})
+        if (image == "") {
+            AgencyModel.updateOne({ 'username': username }, {
+                $set: {
+                    'phone': phone,
+                    'email': email,
+                    'name': name,
+                    'address': address,
+                    'description': description,
+                }
+            }, (err, resp) => {
+                if (err) console.log(err);
+                else res.json({ 'message': 'agency profile updated' })
             })
         } else {
-            AgencyModel.updateOne({'username': username}, {$set: {
-                'phone': phone,
-                'email': email,
-                'name': name,
-                'address': address,
-                'description': description,
-                'image': image,
-            }}, (err, resp)=> {
-                if(err) console.log(err);
-                else res.json({'message': 'agency profile updated'})
+            AgencyModel.updateOne({ 'username': username }, {
+                $set: {
+                    'phone': phone,
+                    'email': email,
+                    'name': name,
+                    'address': address,
+                    'description': description,
+                    'image': image,
+                }
+            }, (err, resp) => {
+                if (err) console.log(err);
+                else res.json({ 'message': 'agency profile updated' })
             })
         }
 
-       
-        
+
+
     }
 
     getAllPlaces = (req: express.Request, res: express.Response) => {
         let client = req.body.client;
 
-        PlaceModel.find({'client': client}, (err, places) => {
+        PlaceModel.find({ 'client': client }, (err, places) => {
             if (err) console.log(err);
             else res.json(places)
         })
@@ -251,11 +259,11 @@ export class UserController {
         let doors = req.body.doors;
 
         PlaceModel.find({}, (err, resp) => {
-            if(err) console.log(err);
+            if (err) console.log(err);
             else {
                 let max_id = 0;
-                for(let r of resp){
-                    if(r['id'] > max_id){
+                for (let r of resp) {
+                    if (r['id'] > max_id) {
                         max_id = r['id'];
                     }
                 }
@@ -271,9 +279,9 @@ export class UserController {
                     id: (max_id + 1),
                 })
 
-                place.save((err, resp)=> {
-                    if(err) console.log(err);
-                    else res.json({'message': 'object added'});
+                place.save((err, resp) => {
+                    if (err) console.log(err);
+                    else res.json({ 'message': 'object added' });
                 })
 
             }
@@ -284,22 +292,28 @@ export class UserController {
 
         let id = req.body.id;
 
-        PlaceModel.deleteOne({'id': id}, (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': 'object deleted'});
+        PlaceModel.deleteOne({ 'id': id }, (err, resp) => {
+            if (err) console.log(err);
+            else {
+                RenovationReqModel.deleteMany({'idPlace': id}, (err, resp)=> {
+                    if(err) console.log(err);
+                    else res.json({ 'message': 'object deleted' });
+                })
+                
+            }
         })
-        
+
     }
 
     getComments = (req: express.Request, res: express.Response) => {
 
         let agency = req.body.agency;
 
-        CommentModel.find({'agency': agency}, (err, comments) => {
-            if(err) console.log(err);
+        CommentModel.find({ 'agency': agency }, (err, comments) => {
+            if (err) console.log(err);
             else res.json(comments);
         })
-        
+
     }
 
     getClientComment = (req: express.Request, res: express.Response) => {
@@ -307,11 +321,11 @@ export class UserController {
         let client = req.body.client;
         let agency = req.body.agency;
 
-        CommentModel.findOne({'client': client, 'agency': agency}, (err, comment) => {
-            if(err) console.log(err);
+        CommentModel.findOne({ 'client': client, 'agency': agency }, (err, comment) => {
+            if (err) console.log(err);
             else res.json(comment);
         })
-        
+
     }
 
     updateObject = (req: express.Request, res: express.Response) => {
@@ -325,43 +339,45 @@ export class UserController {
         let rooms = req.body.rooms;
         let doors = req.body.doors;
 
-        PlaceModel.updateOne({'id': id}, {$set: {
-            'client': client,
-            'type' : type,
-            'address': address,
-            'roomNumber': roomNumber,
-            'size': size,
-            'rooms': rooms,
-            'doors': doors
-        }}, (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': 'object updated'});
+        PlaceModel.updateOne({ 'id': id }, {
+            $set: {
+                'client': client,
+                'type': type,
+                'address': address,
+                'roomNumber': roomNumber,
+                'size': size,
+                'rooms': rooms,
+                'doors': doors
+            }
+        }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': 'object updated' });
         })
-        
+
     }
 
     requestRenovation = (req: express.Request, res: express.Response) => {
 
-       
+
         let agency = req.body.agency;
         let client = req.body.client;
         let idPlace = req.body.idPlace;
         let dateStart = req.body.dateStart;
         let dateEnd = req.body.dateEnd;
-        
+
 
         RenovationReqModel.find({}, (err, resp) => {
-            if(err) console.log(err);
+            if (err) console.log(err);
             else {
                 let max_id = 0;
-                for(let r of resp){
-                    if(r['id'] > max_id){
+                for (let r of resp) {
+                    if (r['id'] > max_id) {
                         max_id = r['id'];
                     }
                 }
 
                 let ren = new RenovationReqModel({
-                    id: (max_id+1),
+                    id: (max_id + 1),
                     agency: agency,
                     client: client,
                     idPlace: idPlace,
@@ -371,9 +387,9 @@ export class UserController {
                     offer: 0,
                 })
 
-                ren.save((err, resp)=> {
-                    if(err) console.log(err);
-                    else res.json({'message': 'renovation request added'});
+                ren.save((err, resp) => {
+                    if (err) console.log(err);
+                    else res.json({ 'message': 'renovation request added' });
                 })
 
             }
@@ -384,35 +400,37 @@ export class UserController {
 
         let client = req.body.client;
 
-        RenovationReqModel.find({'client': client}, (err, requests) => {
-            if(err) console.log(err);
+        RenovationReqModel.find({ 'client': client }, (err, requests) => {
+            if (err) console.log(err);
             else res.json(requests);
         })
-        
+
     }
 
     getAllRenovationRequestsAgency = (req: express.Request, res: express.Response) => {
 
         let agency = req.body.agency;
 
-        RenovationReqModel.find({'agency': agency}, (err, requests) => {
-            if(err) console.log(err);
+        RenovationReqModel.find({ 'agency': agency }, (err, requests) => {
+            if (err) console.log(err);
             else res.json(requests);
         })
-        
+
     }
 
     declineJobRequest = (req: express.Request, res: express.Response) => {
 
         let id = req.body.id;
 
-        RenovationReqModel.updateOne({'id': id}, {$set: {
-            'status' : "declined",
-        }},  (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': "job request declined"});
+        RenovationReqModel.updateOne({ 'id': id }, {
+            $set: {
+                'status': "declined",
+            }
+        }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': "job request declined" });
         })
-        
+
     }
 
     acceptJobRequest = (req: express.Request, res: express.Response) => {
@@ -420,51 +438,57 @@ export class UserController {
         let id = req.body.id;
         let offer = req.body.offer;
 
-        RenovationReqModel.updateOne({'id': id}, {$set: {
-            'status' : "accepted",
-            'offer' : offer,
-        }},  (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': "job request accepted"});
+        RenovationReqModel.updateOne({ 'id': id }, {
+            $set: {
+                'status': "accepted",
+                'offer': offer,
+            }
+        }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': "job request accepted" });
         })
-        
+
     }
 
     acceptClientOffer = (req: express.Request, res: express.Response) => {
 
         let id = req.body.id;
 
-        RenovationReqModel.updateOne({'id': id}, {$set: {
-            'status' : "active",
-        }},  (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': "job offer accepted by client"});
+        RenovationReqModel.updateOne({ 'id': id }, {
+            $set: {
+                'status': "active",
+            }
+        }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': "job offer accepted by client" });
         })
-        
+
     }
 
     declineClientOffer = (req: express.Request, res: express.Response) => {
 
         let id = req.body.id;
 
-        RenovationReqModel.deleteOne({'id': id}, (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': "job offer deleted by client"});
+        RenovationReqModel.deleteOne({ 'id': id }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': "job offer deleted by client" });
         })
-        
+
     }
 
     finishJob = (req: express.Request, res: express.Response) => {
 
         let id = req.body.id;
 
-        RenovationReqModel.updateOne({'id': id}, {$set: {
-            'status' : "finished",
-        }},  (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': "job offer finished by client"});
+        RenovationReqModel.updateOne({ 'id': id }, {
+            $set: {
+                'status': "finished",
+            }
+        }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': "job offer finished by client" });
         })
-        
+
     }
 
     addWorkerRequest = (req: express.Request, res: express.Response) => {
@@ -472,29 +496,31 @@ export class UserController {
         let agency = req.body.agency;
         let number = req.body.number;
 
-        WorkerRequestModel.findOne({'agency': agency}, (err, req)=> {
-            if(err) console.log(err);
+        WorkerRequestModel.findOne({ 'agency': agency }, (err, req) => {
+            if (err) console.log(err);
             else {
-                if(req == null){
+                if (req == null) {
                     // no request in the database
                     let wr = new WorkerRequestModel({
                         agency: agency,
                         number: number,
                         status: "pending",
                     })
-            
-                    wr.save((err, resp)=> {
-                        if(err) console.log(err);
-                        else res.json({'message': 'worker request added'});
+
+                    wr.save((err, resp) => {
+                        if (err) console.log(err);
+                        else res.json({ 'message': 'worker request added' });
                     })
                 } else {
                     // update existing request
-                    WorkerRequestModel.updateOne({'agency': agency}, {$set: {
-                        'number': number,
-                        'status': "pending"
-                    }}, (err, resp) => {
-                        if(err) console.log(err);
-                        else res.json({'message': 'worker request updated'})
+                    WorkerRequestModel.updateOne({ 'agency': agency }, {
+                        $set: {
+                            'number': number,
+                            'status': "pending"
+                        }
+                    }, (err, resp) => {
+                        if (err) console.log(err);
+                        else res.json({ 'message': 'worker request updated' })
                     })
                 }
             }
@@ -505,10 +531,10 @@ export class UserController {
 
         let agency = req.body.agency;
 
-        WorkerRequestModel.findOne({'agency': agency}, (err, wr) => {
-            if(err) console.log(err);
+        WorkerRequestModel.findOne({ 'agency': agency }, (err, wr) => {
+            if (err) console.log(err);
             else res.json(wr);
-        })   
+        })
     }
 
     addWorker = (req: express.Request, res: express.Response) => {
@@ -521,17 +547,17 @@ export class UserController {
         let specialization = req.body.specialization;
 
         WorkerModel.find({}, (err, resp) => {
-            if(err) console.log(err);
+            if (err) console.log(err);
             else {
                 let max_id = 0;
-                for(let r of resp){
-                    if(r['id'] > max_id){
+                for (let r of resp) {
+                    if (r['id'] > max_id) {
                         max_id = r['id'];
                     }
                 }
 
                 let worker = new WorkerModel({
-                    id: (max_id+1),
+                    id: (max_id + 1),
                     agency: agency,
                     name: name,
                     surname: surname,
@@ -541,9 +567,9 @@ export class UserController {
                     status: "free",
                 })
 
-                worker.save((err, resp)=> {
-                    if(err) console.log(err);
-                    else res.json({'message': 'worker added'});
+                worker.save((err, resp) => {
+                    if (err) console.log(err);
+                    else res.json({ 'message': 'worker added' });
                 })
 
             }
@@ -554,34 +580,38 @@ export class UserController {
 
         let agency = req.body.agency;
 
-        WorkerModel.find({'agency': agency}, (err, workers) => {
-            if(err) console.log(err);
+        WorkerModel.find({ 'agency': agency }, (err, workers) => {
+            if (err) console.log(err);
             else res.json(workers);
-        })   
+        })
     }
 
     takeWorker = (req: express.Request, res: express.Response) => {
 
         let id = req.body.id;
 
-        WorkerModel.updateOne({'id': id}, {$set: {
-            'status': "working",
-        }}, (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': "worker taken"});
-        })   
+        WorkerModel.updateOne({ 'id': id }, {
+            $set: {
+                'status': "working",
+            }
+        }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': "worker taken" });
+        })
     }
 
     freeWorker = (req: express.Request, res: express.Response) => {
 
         let id = req.body.id;
 
-        WorkerModel.updateOne({'id': id}, {$set: {
-            'status': "free",
-        }}, (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': "worker freed"});
-        })   
+        WorkerModel.updateOne({ 'id': id }, {
+            $set: {
+                'status': "free",
+            }
+        }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': "worker freed" });
+        })
     }
 
     colorObject = (req: express.Request, res: express.Response) => {
@@ -593,14 +623,16 @@ export class UserController {
         let height = req.body.height;
         let x = req.body.x;
         let y = req.body.y;
-        
 
-        PlaceModel.updateOne({'id': id}, {$set: {
-            "rooms.$[elem].color": color,
-        }}, { arrayFilters: [{"elem.width": width, "elem.height" : height, "elem.x" : x, "elem.y" : y}]}, (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': 'object updated'});
-        }) 
+
+        PlaceModel.updateOne({ 'id': id }, {
+            $set: {
+                "rooms.$[elem].color": color,
+            }
+        }, { arrayFilters: [{ "elem.width": width, "elem.height": height, "elem.x": x, "elem.y": y }] }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': 'object updated' });
+        })
     }
 
     updateComment = (req: express.Request, res: express.Response) => {
@@ -610,13 +642,15 @@ export class UserController {
         let comment = req.body.comment;
         let rating = req.body.rating;
 
-        CommentModel.updateOne({'client': client, 'agency': agency}, {$set : {
-            'comment': comment,
-            'rating': rating,
-        }}, (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': 'comment updated'});
-        }) 
+        CommentModel.updateOne({ 'client': client, 'agency': agency }, {
+            $set: {
+                'comment': comment,
+                'rating': rating,
+            }
+        }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': 'comment updated' });
+        })
     }
 
     addComment = (req: express.Request, res: express.Response) => {
@@ -634,10 +668,10 @@ export class UserController {
         })
 
         com.save((err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': 'comment added'})
+            if (err) console.log(err);
+            else res.json({ 'message': 'comment added' })
         });
-        
+
     }
 
     submitCancelRequest = (req: express.Request, res: express.Response) => {
@@ -646,7 +680,7 @@ export class UserController {
         let agency = req.body.agency;
         let reason = req.body.reason;
         let idReq = req.body.idReq;
-       
+
         let canc = new CancelModel({
             client: client,
             agency: agency,
@@ -654,25 +688,25 @@ export class UserController {
             idReq: idReq,
         })
 
-        canc.save((err, resp)=> {
-            if(err) console.log(err);
-            else res.json({'message': 'cancellation request added'});
+        canc.save((err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': 'cancellation request added' });
         })
     }
 
     getCancelRequest = (req: express.Request, res: express.Response) => {
 
         let idReq = req.body.idReq;
-       
-        CancelModel.findOne({'idReq': idReq}, (err, cancelReq)=> {
-            if(err) console.log(err);
+
+        CancelModel.findOne({ 'idReq': idReq }, (err, cancelReq) => {
+            if (err) console.log(err);
             else res.json(cancelReq);
         })
     }
 
     getDeclinedRegistrations = (req: express.Request, res: express.Response) => {
 
-        RegistrationModel.find({'state': 'declined'}, (err, registrations) => {
+        RegistrationModel.find({ 'state': 'declined' }, (err, registrations) => {
             if (err) console.log(err);
             else res.json(registrations)
         })
@@ -683,11 +717,11 @@ export class UserController {
         let agency = req.body.agency;
         let client = req.body.client;
 
-        CommentModel.deleteOne({'agency': agency, 'client': client}, (err, resp) => {
-            if(err) console.log(err);
-            else res.json({'message': 'comment deleted'});
+        CommentModel.deleteOne({ 'agency': agency, 'client': client }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': 'comment deleted' });
         })
-        
+
     }
 
     changeUserPassword = (req: express.Request, res: express.Response) => {
@@ -695,27 +729,31 @@ export class UserController {
         let email = req.body.email;
         let password = req.body.password;
 
-        ClientModel.findOne({'email': email}, (err, client) => {
-            if(err) console.log(err);
-            else{
-                if(client){
-                    ClientModel.updateOne({'email': email}, {$set: {
-                        'password': password,
-                    }}, (err, resp) => {
-                        if(err) console.log(err);
-                        else res.json({'message': 'client password updated'})
+        ClientModel.findOne({ 'email': email }, (err, client) => {
+            if (err) console.log(err);
+            else {
+                if (client) {
+                    ClientModel.updateOne({ 'email': email }, {
+                        $set: {
+                            'password': password,
+                        }
+                    }, (err, resp) => {
+                        if (err) console.log(err);
+                        else res.json({ 'message': 'client password updated' })
                     })
                 } else {
-                    AgencyModel.updateOne({'email': email}, {$set: {
-                        'password': password,
-                    }}, (err, resp) => {
-                        if(err) console.log(err);
-                        else res.json({'message': 'agency password updated'})
+                    AgencyModel.updateOne({ 'email': email }, {
+                        $set: {
+                            'password': password,
+                        }
+                    }, (err, resp) => {
+                        if (err) console.log(err);
+                        else res.json({ 'message': 'agency password updated' })
                     })
                 }
             }
         })
-        
+
     }
 
     changeUserPasswordUsername = (req: express.Request, res: express.Response) => {
@@ -723,32 +761,36 @@ export class UserController {
         let username = req.body.username;
         let password = req.body.password;
 
-        ClientModel.findOne({'username': username}, (err, client) => {
-            if(err) console.log(err);
-            else{
-                if(client){
-                    ClientModel.updateOne({'username': username}, {$set: {
-                        'password': password,
-                    }}, (err, resp) => {
-                        if(err) console.log(err);
-                        else res.json({'message': 'client password updated'})
+        ClientModel.findOne({ 'username': username }, (err, client) => {
+            if (err) console.log(err);
+            else {
+                if (client) {
+                    ClientModel.updateOne({ 'username': username }, {
+                        $set: {
+                            'password': password,
+                        }
+                    }, (err, resp) => {
+                        if (err) console.log(err);
+                        else res.json({ 'message': 'client password updated' })
                     })
                 } else {
-                    AgencyModel.updateOne({'username': username}, {$set: {
-                        'password': password,
-                    }}, (err, resp) => {
-                        if(err) console.log(err);
-                        else res.json({'message': 'agency password updated'})
+                    AgencyModel.updateOne({ 'username': username }, {
+                        $set: {
+                            'password': password,
+                        }
+                    }, (err, resp) => {
+                        if (err) console.log(err);
+                        else res.json({ 'message': 'agency password updated' })
                     })
                 }
             }
         })
-        
+
     }
 
-    
 
-    
-    
-   
+
+
+
+
 }

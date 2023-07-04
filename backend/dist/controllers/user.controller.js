@@ -159,12 +159,14 @@ class UserController {
             let phone = req.body.phone;
             let image = req.body.image;
             if (image == "") {
-                client_1.default.updateOne({ 'username': username }, { $set: {
+                client_1.default.updateOne({ 'username': username }, {
+                    $set: {
                         'first_name': first_name,
                         'last_name': last_name,
                         'email': email,
                         'phone': phone,
-                    } }, (err, resp) => {
+                    }
+                }, (err, resp) => {
                     if (err)
                         console.log(err);
                     else
@@ -172,13 +174,15 @@ class UserController {
                 });
             }
             else {
-                client_1.default.updateOne({ 'username': username }, { $set: {
+                client_1.default.updateOne({ 'username': username }, {
+                    $set: {
                         'first_name': first_name,
                         'last_name': last_name,
                         'email': email,
                         'phone': phone,
                         'image': image,
-                    } }, (err, resp) => {
+                    }
+                }, (err, resp) => {
                     if (err)
                         console.log(err);
                     else
@@ -195,13 +199,15 @@ class UserController {
             let address = req.body.address;
             let description = req.body.description;
             if (image == "") {
-                agency_1.default.updateOne({ 'username': username }, { $set: {
+                agency_1.default.updateOne({ 'username': username }, {
+                    $set: {
                         'phone': phone,
                         'email': email,
                         'name': name,
                         'address': address,
                         'description': description,
-                    } }, (err, resp) => {
+                    }
+                }, (err, resp) => {
                     if (err)
                         console.log(err);
                     else
@@ -209,14 +215,16 @@ class UserController {
                 });
             }
             else {
-                agency_1.default.updateOne({ 'username': username }, { $set: {
+                agency_1.default.updateOne({ 'username': username }, {
+                    $set: {
                         'phone': phone,
                         'email': email,
                         'name': name,
                         'address': address,
                         'description': description,
                         'image': image,
-                    } }, (err, resp) => {
+                    }
+                }, (err, resp) => {
                     if (err)
                         console.log(err);
                     else
@@ -275,8 +283,14 @@ class UserController {
             place_1.default.deleteOne({ 'id': id }, (err, resp) => {
                 if (err)
                     console.log(err);
-                else
-                    res.json({ 'message': 'object deleted' });
+                else {
+                    renovation_requests_1.default.deleteMany({ 'idPlace': id }, (err, resp) => {
+                        if (err)
+                            console.log(err);
+                        else
+                            res.json({ 'message': 'object deleted' });
+                    });
+                }
             });
         };
         this.getComments = (req, res) => {
@@ -307,7 +321,8 @@ class UserController {
             let size = req.body.size;
             let rooms = req.body.rooms;
             let doors = req.body.doors;
-            place_1.default.updateOne({ 'id': id }, { $set: {
+            place_1.default.updateOne({ 'id': id }, {
+                $set: {
                     'client': client,
                     'type': type,
                     'address': address,
@@ -315,7 +330,8 @@ class UserController {
                     'size': size,
                     'rooms': rooms,
                     'doors': doors
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -377,9 +393,11 @@ class UserController {
         };
         this.declineJobRequest = (req, res) => {
             let id = req.body.id;
-            renovation_requests_1.default.updateOne({ 'id': id }, { $set: {
+            renovation_requests_1.default.updateOne({ 'id': id }, {
+                $set: {
                     'status': "declined",
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -389,10 +407,12 @@ class UserController {
         this.acceptJobRequest = (req, res) => {
             let id = req.body.id;
             let offer = req.body.offer;
-            renovation_requests_1.default.updateOne({ 'id': id }, { $set: {
+            renovation_requests_1.default.updateOne({ 'id': id }, {
+                $set: {
                     'status': "accepted",
                     'offer': offer,
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -401,9 +421,11 @@ class UserController {
         };
         this.acceptClientOffer = (req, res) => {
             let id = req.body.id;
-            renovation_requests_1.default.updateOne({ 'id': id }, { $set: {
+            renovation_requests_1.default.updateOne({ 'id': id }, {
+                $set: {
                     'status': "active",
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -421,9 +443,11 @@ class UserController {
         };
         this.finishJob = (req, res) => {
             let id = req.body.id;
-            renovation_requests_1.default.updateOne({ 'id': id }, { $set: {
+            renovation_requests_1.default.updateOne({ 'id': id }, {
+                $set: {
                     'status': "finished",
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -453,10 +477,12 @@ class UserController {
                     }
                     else {
                         // update existing request
-                        worker_request_1.default.updateOne({ 'agency': agency }, { $set: {
+                        worker_request_1.default.updateOne({ 'agency': agency }, {
+                            $set: {
                                 'number': number,
                                 'status': "pending"
-                            } }, (err, resp) => {
+                            }
+                        }, (err, resp) => {
                             if (err)
                                 console.log(err);
                             else
@@ -522,9 +548,11 @@ class UserController {
         };
         this.takeWorker = (req, res) => {
             let id = req.body.id;
-            worker_1.default.updateOne({ 'id': id }, { $set: {
+            worker_1.default.updateOne({ 'id': id }, {
+                $set: {
                     'status': "working",
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -533,9 +561,11 @@ class UserController {
         };
         this.freeWorker = (req, res) => {
             let id = req.body.id;
-            worker_1.default.updateOne({ 'id': id }, { $set: {
+            worker_1.default.updateOne({ 'id': id }, {
+                $set: {
                     'status': "free",
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -549,9 +579,11 @@ class UserController {
             let height = req.body.height;
             let x = req.body.x;
             let y = req.body.y;
-            place_1.default.updateOne({ 'id': id }, { $set: {
+            place_1.default.updateOne({ 'id': id }, {
+                $set: {
                     "rooms.$[elem].color": color,
-                } }, { arrayFilters: [{ "elem.width": width, "elem.height": height, "elem.x": x, "elem.y": y }] }, (err, resp) => {
+                }
+            }, { arrayFilters: [{ "elem.width": width, "elem.height": height, "elem.x": x, "elem.y": y }] }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -563,10 +595,12 @@ class UserController {
             let agency = req.body.agency;
             let comment = req.body.comment;
             let rating = req.body.rating;
-            comment_1.default.updateOne({ 'client': client, 'agency': agency }, { $set: {
+            comment_1.default.updateOne({ 'client': client, 'agency': agency }, {
+                $set: {
                     'comment': comment,
                     'rating': rating,
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -644,9 +678,11 @@ class UserController {
                     console.log(err);
                 else {
                     if (client) {
-                        client_1.default.updateOne({ 'email': email }, { $set: {
+                        client_1.default.updateOne({ 'email': email }, {
+                            $set: {
                                 'password': password,
-                            } }, (err, resp) => {
+                            }
+                        }, (err, resp) => {
                             if (err)
                                 console.log(err);
                             else
@@ -654,9 +690,11 @@ class UserController {
                         });
                     }
                     else {
-                        agency_1.default.updateOne({ 'email': email }, { $set: {
+                        agency_1.default.updateOne({ 'email': email }, {
+                            $set: {
                                 'password': password,
-                            } }, (err, resp) => {
+                            }
+                        }, (err, resp) => {
                             if (err)
                                 console.log(err);
                             else
@@ -674,9 +712,11 @@ class UserController {
                     console.log(err);
                 else {
                     if (client) {
-                        client_1.default.updateOne({ 'username': username }, { $set: {
+                        client_1.default.updateOne({ 'username': username }, {
+                            $set: {
                                 'password': password,
-                            } }, (err, resp) => {
+                            }
+                        }, (err, resp) => {
                             if (err)
                                 console.log(err);
                             else
@@ -684,9 +724,11 @@ class UserController {
                         });
                     }
                     else {
-                        agency_1.default.updateOne({ 'username': username }, { $set: {
+                        agency_1.default.updateOne({ 'username': username }, {
+                            $set: {
                                 'password': password,
-                            } }, (err, resp) => {
+                            }
+                        }, (err, resp) => {
                             if (err)
                                 console.log(err);
                             else

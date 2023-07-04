@@ -499,6 +499,14 @@ export class AddObjectComponent implements OnInit {
       this.message = "Rooms must be next to each other";
       return;
     }
+    if(this.rooms > 3){
+      this.message = "Max 3 rooms";
+      return;
+    }
+    if(this.rooms < 0 || this.size < 0){
+      this.message = "No negative sizes or room numbers";
+      return;
+    }
 
     this.userService.addObject(this.username, this.objectType, this.address, this.rooms, this.size, this.rectangles, this.doors).subscribe(resp => {
       alert(resp['message']);

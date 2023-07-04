@@ -31,7 +31,7 @@ export class AddWorkerComponent implements OnInit {
     this.spec = "";
 
     this.adminAdd = localStorage.getItem('adminAddWorker');
-    console.log(this.adminAdd)
+    
     if(this.adminAdd){
       console.log('usao admin')
       this.username = this.adminAdd

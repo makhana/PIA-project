@@ -33,6 +33,9 @@ let Agency = new Schema({
     image: {
         type: String
     },
+    numberOfWorkers: {
+        type: Number
+    }
 });
 exports.default = mongoose_1.default.model('AgencyModel', Agency, 'agencies');
 //# sourceMappingURL=agency.js.map

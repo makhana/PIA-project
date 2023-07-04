@@ -75,6 +75,7 @@ class AdminController {
                 idNumber: idNumber,
                 description: description,
                 image: image,
+                numberOfWorkers: 0,
             });
             agency.save((err, resp) => {
                 if (err)
@@ -84,9 +85,11 @@ class AdminController {
             });
         };
         this.getRegistrationRequests = (req, res) => {
-            registration_requests_1.default.find({ 'state': {
+            registration_requests_1.default.find({
+                'state': {
                     $ne: 'declined'
-                } }, (err, registrations) => {
+                }
+            }, (err, registrations) => {
                 if (err)
                     console.log(err);
                 else
@@ -95,9 +98,11 @@ class AdminController {
         };
         this.declineRegistration = (req, res) => {
             let id = req.body.id;
-            registration_requests_1.default.updateOne({ 'id': id }, { $set: {
+            registration_requests_1.default.updateOne({ 'id': id }, {
+                $set: {
                     'state': 'declined'
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -129,13 +134,15 @@ class AdminController {
             let email = req.body.email;
             let phone = req.body.phone;
             let specialization = req.body.specialization;
-            worker_1.default.updateOne({ 'id': id }, { $set: {
+            worker_1.default.updateOne({ 'id': id }, {
+                $set: {
                     'name': name,
                     'surname': surname,
                     'email': email,
                     'phone': phone,
                     'specialization': specialization,
-                } }, (err, resp) => {
+                }
+            }, (err, resp) => {
                 if (err)
                     console.log(err);
                 else
@@ -162,13 +169,27 @@ class AdminController {
         };
         this.acceptWorkerRequest = (req, res) => {
             let agency = req.body.agency;
-            worker_request_1.default.updateOne({ 'agency': agency }, { $set: {
-                    'status': 'approved'
-                } }, (err, resp) => {
+            worker_request_1.default.findOne({ 'agency': agency }, (err, wr) => {
                 if (err)
                     console.log(err);
-                else
-                    res.json({ 'message': 'worker request accepted' });
+                else {
+                    agency_1.default.updateOne({ 'username': agency }, {
+                        $inc: {
+                            'numberOfWorkers': wr['number'],
+                        }
+                    }, (err, resp) => {
+                        if (err)
+                            console.log(err);
+                        else {
+                            worker_request_1.default.deleteOne({ 'agency': agency }, (err, resp) => {
+                                if (err)
+                                    console.log(err);
+                                else
+                                    res.json({ 'message': 'worker request accepted' });
+                            });
+                        }
+                    });
+                }
             });
         };
         this.getAllRenovationRequests = (req, res) => {

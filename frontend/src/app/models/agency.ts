@@ -8,4 +8,5 @@ export class Agency{
     idNumber: number;
     description: string;
     image: string;
+    numberOfWorkers: number;
 }

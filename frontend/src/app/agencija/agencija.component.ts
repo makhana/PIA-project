@@ -70,16 +70,18 @@ export class AgencijaComponent implements OnInit {
     this.offer = 0;
 
     this.username = localStorage.getItem('username');
-    this.userService.getAgency(this.username).subscribe((agency: Agency) => {
-      this.agency = agency;
+    this.userService.getAgency(this.username).subscribe((agencyDB: Agency) => {
+      this.agency = agencyDB;
+      console.log(agencyDB)
+      this.numberOfWorkersAllowed = this.agency.numberOfWorkers;
     })
 
-    this.userService.getWorkersNumber(this.username).subscribe((wr: WorkersRequest) => {
-      if (wr.status == 'approved') {
-        this.numberOfWorkersAllowed = wr.number;
+    // this.userService.getWorkersNumber(this.username).subscribe((wr: WorkersRequest) => {
+    //   if (wr.status == 'approved') {
+    //     this.numberOfWorkersAllowed = wr.number;
 
-      }
-    })
+    //   }
+    // })
 
     this.userService.getAllWorkers(this.username).subscribe((workers: WorkerAgency[]) => {
       this.allWorkers = workers;

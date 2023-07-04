@@ -30,6 +30,9 @@ let Agency = new Schema({
     image: {
         type: String
     },
+    numberOfWorkers: {
+        type: Number
+    }
 })
 
 export default mongoose.model('AgencyModel', Agency, 'agencies');

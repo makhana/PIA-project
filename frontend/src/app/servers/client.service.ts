@@ -104,4 +104,35 @@ export class ClientService {
 
     return this.http.post(`${this.uri}/client/getCancelRequest`, data);
   }
+
+  deleteComment(agency, client) {
+    const data = {
+      agency: agency,
+      client: client,
+    }
+
+    return this.http.post(`${this.uri}/client/deleteComment`, data);
+  }
+
+  updateComment(client, agency, comment, rating) {
+    const data = {
+      client: client,
+      agency: agency,
+      comment: comment,
+      rating: rating,
+    }
+
+    return this.http.post(`${this.uri}/client/updateComment`, data);
+  }
+
+  addComment(client, agency, comment, rating) {
+    const data = {
+      client: client,
+      agency: agency,
+      comment: comment,
+      rating: rating,
+    }
+
+    return this.http.post(`${this.uri}/client/addComment`, data);
+  }
 }

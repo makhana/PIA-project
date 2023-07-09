@@ -43,20 +43,20 @@ userRouter.route('/takeWorker').post((req, res) => new user_controller_1.UserCon
 userRouter.route('/freeWorker').post((req, res) => new user_controller_1.UserController().freeWorker(req, res));
 userRouter.route('/colorObject').post((req, res) => new user_controller_1.UserController().colorObject(req, res));
 userRouter.route('/getClientComment').post((req, res) => new user_controller_1.UserController().getClientComment(req, res));
-userRouter.route('/updateComment').post((req, res) => new user_controller_1.UserController().updateComment(req, res));
-userRouter.route('/addComment').post((req, res) => new user_controller_1.UserController().addComment(req, res));
-// userRouter.route('/submitCancelRequest').post(
-//     (req, res) => new UserController().submitCancelRequest(req, res)
+// userRouter.route('/updateComment').post(
+//     (req, res) => new UserController().updateComment(req, res)
 // )
-// userRouter.route('/getCancelRequest').post(
-//     (req, res) => new UserController().getCancelRequest(req, res)
+// userRouter.route('/addComment').post(
+//     (req, res) => new UserController().addComment(req, res)
 // )
 userRouter.route('/addWorkerRequest').post((req, res) => new user_controller_1.UserController().addWorkerRequest(req, res));
 userRouter.route('/getWorkersNumber').post((req, res) => new user_controller_1.UserController().getWorkersNumber(req, res));
 userRouter.route('/addWorker').post((req, res) => new user_controller_1.UserController().addWorker(req, res));
 userRouter.route('/getAllWorkers').post((req, res) => new user_controller_1.UserController().getAllWorkers(req, res));
 userRouter.route('/getDeclinedRegistrations').get((req, res) => new user_controller_1.UserController().getDeclinedRegistrations(req, res));
-userRouter.route('/deleteComment').post((req, res) => new user_controller_1.UserController().deleteComment(req, res));
+// userRouter.route('/deleteComment').post(
+//     (req, res) => new UserController().deleteComment(req, res)
+// )
 userRouter.route('/changeUserPassword').post((req, res) => new user_controller_1.UserController().changeUserPassword(req, res));
 userRouter.route('/addTemporaryPassword').post((req, res) => new user_controller_1.UserController().addTemporaryPassword(req, res));
 userRouter.route('/checkTime').post((req, res) => new user_controller_1.UserController().checkTime(req, res));

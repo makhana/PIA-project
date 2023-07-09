@@ -186,29 +186,35 @@
                         <label class="form-label"> Number of workers allowed: {{numberOfWorkersAllowed}}</label>
                     </div>
                 </div>
+                <div class="card" *ngIf="allWorkers.length != 0">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Surname</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">Specialization</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let w of allWorkers; let i=index">
+                                        <th scope="row">{{i+1}}</th>
+                                        <td>{{w.name}}</td>
+                                        <td>{{w.surname}}</td>
+                                        <td>{{w.email}}</td>
+                                        <td>{{w.phone}}</td>
+                                        <td>{{w.specialization}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-                <table class="table table-hover" *ngIf="allWorkers.length != 0">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Surname</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Specialization</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let w of allWorkers; let i=index">
-                            <th scope="row">{{i+1}}</th>
-                            <td>{{w.name}}</td>
-                            <td>{{w.surname}}</td>
-                            <td>{{w.email}}</td>
-                            <td>{{w.phone}}</td>
-                            <td>{{w.specialization}}</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
 
             <div class="tab-pane fade" id="jobs">

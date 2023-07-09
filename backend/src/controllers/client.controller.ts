@@ -239,6 +239,57 @@ export class ClientController {
         })
     }
 
+    deleteComment = (req: express.Request, res: express.Response) => {
+
+        let agency = req.body.agency;
+        let client = req.body.client;
+
+        CommentModel.deleteOne({ 'agency': agency, 'client': client }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': 'comment deleted' });
+        })
+
+    }
+
+    updateComment = (req: express.Request, res: express.Response) => {
+
+        let client = req.body.client;
+        let agency = req.body.agency;
+        let comment = req.body.comment;
+        let rating = req.body.rating;
+
+        CommentModel.updateOne({ 'client': client, 'agency': agency }, {
+            $set: {
+                'comment': comment,
+                'rating': rating,
+            }
+        }, (err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': 'comment updated' });
+        })
+    }
+
+    addComment = (req: express.Request, res: express.Response) => {
+
+        let client = req.body.client;
+        let agency = req.body.agency;
+        let comment = req.body.comment;
+        let rating = req.body.rating;
+
+        let com = new CommentModel({
+            agency: agency,
+            client: client,
+            comment: comment,
+            rating: rating,
+        })
+
+        com.save((err, resp) => {
+            if (err) console.log(err);
+            else res.json({ 'message': 'comment added' })
+        });
+
+    }
+
 
 
 

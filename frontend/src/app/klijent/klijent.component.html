@@ -226,92 +226,104 @@
                     </div>
                 </div>
 
-                <div class="row gutters-sm" *ngIf="allAgencies.length != 0">
-                    <table class="table table-hover" *ngIf="searchedAgencies.length == 0 && allAgencies.length != 0">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Profile picture</th>
-                                <th scope="col" (click)="sortData('name')">Name
-                                    <i [ngClass]="{
-                                          'bi bi-arrow-up': sortColumn === 'name' && sortDirection === 1,
-                                          'bi bi-arrow-down': sortColumn === 'name' && sortDirection === -1
-                                        }"></i>
-                                </th>
-                                <th scope="col" (click)="sortData('address')">Address
-                                    <i [ngClass]="{
-                                          'bi bi-arrow-up': sortColumn === 'address' && sortDirection === 1,
-                                          'bi bi-arrow-down': sortColumn === 'address' && sortDirection === -1
-                                        }"></i>
-                                </th>
-                                <th scope="col" (click)="sortData('description')">Description
-                                    <i [ngClass]="{
-                                          'bi bi-arrow-up': sortColumn === 'description' && sortDirection === 1,
-                                          'bi bi-arrow-down': sortColumn === 'description' && sortDirection === -1
-                                        }"></i>
-                                </th>
-                                <th scope="col">Request work</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let agency of allAgencies; let i=index" (click)="lookUpAgency(agency)">
-                                <th scope="row">{{i+1}}</th>
-                                <td>
-                                    <img src="http://localhost:4000/user/getImage/{{agency.image}}" alt="Admin"
-                                        class="rounded-circle" width="50">
-                                </td>
-                                <td>{{agency.name}}</td>
-                                <td>{{agency.address}}</td>
-                                <td>{{agency.description}}</td>
-                                <td>
-                                    <button (click)="requestWork(agency)" class="btn btn-outline-dark">request</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="row gutters-sm">
+                    <div class="card" *ngIf="allAgencies.length != 0">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover"
+                                    *ngIf="searchedAgencies.length == 0 && allAgencies.length != 0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Profile picture</th>
+                                            <th scope="col" (click)="sortData('name')">Name
+                                                <i [ngClass]="{
+                                                      'bi bi-arrow-up': sortColumn === 'name' && sortDirection === 1,
+                                                      'bi bi-arrow-down': sortColumn === 'name' && sortDirection === -1
+                                                    }"></i>
+                                            </th>
+                                            <th scope="col" (click)="sortData('address')">Address
+                                                <i [ngClass]="{
+                                                      'bi bi-arrow-up': sortColumn === 'address' && sortDirection === 1,
+                                                      'bi bi-arrow-down': sortColumn === 'address' && sortDirection === -1
+                                                    }"></i>
+                                            </th>
+                                            <th scope="col" (click)="sortData('description')">Description
+                                                <i [ngClass]="{
+                                                      'bi bi-arrow-up': sortColumn === 'description' && sortDirection === 1,
+                                                      'bi bi-arrow-down': sortColumn === 'description' && sortDirection === -1
+                                                    }"></i>
+                                            </th>
+                                            <th scope="col">Request work</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let agency of allAgencies; let i=index"
+                                            (click)="lookUpAgency(agency)">
+                                            <th scope="row">{{i+1}}</th>
+                                            <td>
+                                                <img src="http://localhost:4000/user/getImage/{{agency.image}}"
+                                                    alt="Admin" class="rounded-circle" width="50">
+                                            </td>
+                                            <td>{{agency.name}}</td>
+                                            <td>{{agency.address}}</td>
+                                            <td>{{agency.description}}</td>
+                                            <td>
+                                                <button (click)="requestWork(agency)"
+                                                    class="btn btn-outline-dark">request</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                    <table class="table table-hover" *ngIf="searchedAgencies.length != 0">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Profile picture</th>
-                                <th scope="col" (click)="sortData('name')">Name
-                                    <i [ngClass]="{
-                                          'bi bi-arrow-up': sortColumn === 'name' && sortDirection === 1,
-                                          'bi bi-arrow-down': sortColumn === 'name' && sortDirection === -1
-                                        }"></i>
-                                </th>
-                                <th scope="col" (click)="sortData('address')">Address
-                                    <i [ngClass]="{
-                                          'bi bi-arrow-up': sortColumn === 'address' && sortDirection === 1,
-                                          'bi bi-arrow-down': sortColumn === 'address' && sortDirection === -1
-                                        }"></i>
-                                </th>
-                                <th scope="col" (click)="sortData('description')">Description
-                                    <i [ngClass]="{
-                                          'bi bi-arrow-up': sortColumn === 'description' && sortDirection === 1,
-                                          'bi bi-arrow-down': sortColumn === 'description' && sortDirection === -1
-                                        }"></i>
-                                </th>
-                                <th scope="col">Request work</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let agency of searchedAgencies; let i=index" (click)="lookUpAgency(agency)">
-                                <th scope="row">{{i+1}}</th>
-                                <td>
-                                    <img src="http://localhost:4000/user/getImage/{{agency.image}}" alt="Admin"
-                                        class="rounded-circle" width="50">
-                                </td>
-                                <td>{{agency.name}}</td>
-                                <td>{{agency.address}}</td>
-                                <td>{{agency.description}}</td>
-                                <td>
-                                    <button (click)="requestWork(agency)" class="btn btn-outline-dark">request</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <table class="table table-hover" *ngIf="searchedAgencies.length != 0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Profile picture</th>
+                                            <th scope="col" (click)="sortData('name')">Name
+                                                <i [ngClass]="{
+                                                      'bi bi-arrow-up': sortColumn === 'name' && sortDirection === 1,
+                                                      'bi bi-arrow-down': sortColumn === 'name' && sortDirection === -1
+                                                    }"></i>
+                                            </th>
+                                            <th scope="col" (click)="sortData('address')">Address
+                                                <i [ngClass]="{
+                                                      'bi bi-arrow-up': sortColumn === 'address' && sortDirection === 1,
+                                                      'bi bi-arrow-down': sortColumn === 'address' && sortDirection === -1
+                                                    }"></i>
+                                            </th>
+                                            <th scope="col" (click)="sortData('description')">Description
+                                                <i [ngClass]="{
+                                                      'bi bi-arrow-up': sortColumn === 'description' && sortDirection === 1,
+                                                      'bi bi-arrow-down': sortColumn === 'description' && sortDirection === -1
+                                                    }"></i>
+                                            </th>
+                                            <th scope="col">Request work</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let agency of searchedAgencies; let i=index"
+                                            (click)="lookUpAgency(agency)">
+                                            <th scope="row">{{i+1}}</th>
+                                            <td>
+                                                <img src="http://localhost:4000/user/getImage/{{agency.image}}"
+                                                    alt="Admin" class="rounded-circle" width="50">
+                                            </td>
+                                            <td>{{agency.name}}</td>
+                                            <td>{{agency.address}}</td>
+                                            <td>{{agency.description}}</td>
+                                            <td>
+                                                <button (click)="requestWork(agency)"
+                                                    class="btn btn-outline-dark">request</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

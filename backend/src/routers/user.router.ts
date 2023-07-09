@@ -100,21 +100,6 @@ userRouter.route('/getClientComment').post(
     (req, res) => new UserController().getClientComment(req, res)
 )
 
-userRouter.route('/updateComment').post(
-    (req, res) => new UserController().updateComment(req, res)
-)
-
-userRouter.route('/addComment').post(
-    (req, res) => new UserController().addComment(req, res)
-)
-
-// userRouter.route('/submitCancelRequest').post(
-//     (req, res) => new UserController().submitCancelRequest(req, res)
-// )
-
-// userRouter.route('/getCancelRequest').post(
-//     (req, res) => new UserController().getCancelRequest(req, res)
-// )
 
 userRouter.route('/addWorkerRequest').post(
     (req, res) => new UserController().addWorkerRequest(req, res)
@@ -136,9 +121,6 @@ userRouter.route('/getDeclinedRegistrations').get(
     (req, res) => new UserController().getDeclinedRegistrations(req, res)
 )
 
-userRouter.route('/deleteComment').post(
-    (req, res) => new UserController().deleteComment(req, res)
-)
 
 userRouter.route('/changeUserPassword').post(
     (req, res) => new UserController().changeUserPassword(req, res)

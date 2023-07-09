@@ -526,63 +526,36 @@ class UserController {
                     res.json({ 'message': 'object updated' });
             });
         };
-        this.updateComment = (req, res) => {
-            let client = req.body.client;
-            let agency = req.body.agency;
-            let comment = req.body.comment;
-            let rating = req.body.rating;
-            comment_1.default.updateOne({ 'client': client, 'agency': agency }, {
-                $set: {
-                    'comment': comment,
-                    'rating': rating,
-                }
-            }, (err, resp) => {
-                if (err)
-                    console.log(err);
-                else
-                    res.json({ 'message': 'comment updated' });
-            });
-        };
-        this.addComment = (req, res) => {
-            let client = req.body.client;
-            let agency = req.body.agency;
-            let comment = req.body.comment;
-            let rating = req.body.rating;
-            let com = new comment_1.default({
-                agency: agency,
-                client: client,
-                comment: comment,
-                rating: rating,
-            });
-            com.save((err, resp) => {
-                if (err)
-                    console.log(err);
-                else
-                    res.json({ 'message': 'comment added' });
-            });
-        };
-        // submitCancelRequest = (req: express.Request, res: express.Response) => {
+        // updateComment = (req: express.Request, res: express.Response) => {
         //     let client = req.body.client;
         //     let agency = req.body.agency;
-        //     let reason = req.body.reason;
-        //     let idReq = req.body.idReq;
-        //     let canc = new CancelModel({
-        //         client: client,
-        //         agency: agency,
-        //         reason: reason,
-        //         idReq: idReq,
-        //     })
-        //     canc.save((err, resp) => {
+        //     let comment = req.body.comment;
+        //     let rating = req.body.rating;
+        //     CommentModel.updateOne({ 'client': client, 'agency': agency }, {
+        //         $set: {
+        //             'comment': comment,
+        //             'rating': rating,
+        //         }
+        //     }, (err, resp) => {
         //         if (err) console.log(err);
-        //         else res.json({ 'message': 'cancellation request added' });
+        //         else res.json({ 'message': 'comment updated' });
         //     })
         // }
-        // getCancelRequest = (req: express.Request, res: express.Response) => {
-        //     let idReq = req.body.idReq;
-        //     CancelModel.findOne({ 'idReq': idReq }, (err, cancelReq) => {
-        //         if (err) console.log(err);
-        //         else res.json(cancelReq);
+        // addComment = (req: express.Request, res: express.Response) => {
+        //     let client = req.body.client;
+        //     let agency = req.body.agency;
+        //     let comment = req.body.comment;
+        //     let rating = req.body.rating;
+        //     let com = new CommentModel({
+        //         agency: agency,
+        //         client: client,
+        //         comment: comment,
+        //         rating: rating,
         //     })
+        //     com.save((err, resp) => {
+        //         if (err) console.log(err);
+        //         else res.json({ 'message': 'comment added' })
+        //     });
         // }
         this.getDeclinedRegistrations = (req, res) => {
             registration_requests_1.default.find({ 'state': 'declined' }, (err, registrations) => {
@@ -592,16 +565,14 @@ class UserController {
                     res.json(registrations);
             });
         };
-        this.deleteComment = (req, res) => {
-            let agency = req.body.agency;
-            let client = req.body.client;
-            comment_1.default.deleteOne({ 'agency': agency, 'client': client }, (err, resp) => {
-                if (err)
-                    console.log(err);
-                else
-                    res.json({ 'message': 'comment deleted' });
-            });
-        };
+        // deleteComment = (req: express.Request, res: express.Response) => {
+        //     let agency = req.body.agency;
+        //     let client = req.body.client;
+        //     CommentModel.deleteOne({ 'agency': agency, 'client': client }, (err, resp) => {
+        //         if (err) console.log(err);
+        //         else res.json({ 'message': 'comment deleted' });
+        //     })
+        // }
         this.changeUserPassword = (req, res) => {
             let email = req.body.email;
             let password = req.body.password;

@@ -548,74 +548,6 @@ export class UserController {
         })
     }
 
-    updateComment = (req: express.Request, res: express.Response) => {
-
-        let client = req.body.client;
-        let agency = req.body.agency;
-        let comment = req.body.comment;
-        let rating = req.body.rating;
-
-        CommentModel.updateOne({ 'client': client, 'agency': agency }, {
-            $set: {
-                'comment': comment,
-                'rating': rating,
-            }
-        }, (err, resp) => {
-            if (err) console.log(err);
-            else res.json({ 'message': 'comment updated' });
-        })
-    }
-
-    addComment = (req: express.Request, res: express.Response) => {
-
-        let client = req.body.client;
-        let agency = req.body.agency;
-        let comment = req.body.comment;
-        let rating = req.body.rating;
-
-        let com = new CommentModel({
-            agency: agency,
-            client: client,
-            comment: comment,
-            rating: rating,
-        })
-
-        com.save((err, resp) => {
-            if (err) console.log(err);
-            else res.json({ 'message': 'comment added' })
-        });
-
-    }
-
-    // submitCancelRequest = (req: express.Request, res: express.Response) => {
-
-    //     let client = req.body.client;
-    //     let agency = req.body.agency;
-    //     let reason = req.body.reason;
-    //     let idReq = req.body.idReq;
-
-    //     let canc = new CancelModel({
-    //         client: client,
-    //         agency: agency,
-    //         reason: reason,
-    //         idReq: idReq,
-    //     })
-
-    //     canc.save((err, resp) => {
-    //         if (err) console.log(err);
-    //         else res.json({ 'message': 'cancellation request added' });
-    //     })
-    // }
-
-    // getCancelRequest = (req: express.Request, res: express.Response) => {
-
-    //     let idReq = req.body.idReq;
-
-    //     CancelModel.findOne({ 'idReq': idReq }, (err, cancelReq) => {
-    //         if (err) console.log(err);
-    //         else res.json(cancelReq);
-    //     })
-    // }
 
     getDeclinedRegistrations = (req: express.Request, res: express.Response) => {
 
@@ -625,17 +557,6 @@ export class UserController {
         })
     }
 
-    deleteComment = (req: express.Request, res: express.Response) => {
-
-        let agency = req.body.agency;
-        let client = req.body.client;
-
-        CommentModel.deleteOne({ 'agency': agency, 'client': client }, (err, resp) => {
-            if (err) console.log(err);
-            else res.json({ 'message': 'comment deleted' });
-        })
-
-    }
 
     changeUserPassword = (req: express.Request, res: express.Response) => {
 

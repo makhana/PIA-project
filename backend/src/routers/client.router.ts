@@ -38,6 +38,19 @@ clientRouter.route('/getCancelRequest').post(
     (req, res) => new ClientController().getCancelRequest(req, res)
 )
 
+clientRouter.route('/deleteComment').post(
+    (req, res) => new ClientController().deleteComment(req, res)
+)
+
+clientRouter.route('/updateComment').post(
+    (req, res) => new ClientController().updateComment(req, res)
+)
+
+clientRouter.route('/addComment').post(
+    (req, res) => new ClientController().addComment(req, res)
+)
+
+
 
 
 

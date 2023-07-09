@@ -274,60 +274,13 @@ export class UserService {
     return this.http.post(`${this.uri}/user/colorObject`, data);
   }
 
-  updateComment(client, agency, comment, rating) {
-    const data = {
-      client: client,
-      agency: agency,
-      comment: comment,
-      rating: rating,
-    }
 
-    return this.http.post(`${this.uri}/user/updateComment`, data);
-  }
-
-  addComment(client, agency, comment, rating) {
-    const data = {
-      client: client,
-      agency: agency,
-      comment: comment,
-      rating: rating,
-    }
-
-    return this.http.post(`${this.uri}/user/addComment`, data);
-  }
-
-  // submitCancelRequest(client, agency, reason, id) {
-  //   const data = {
-  //     client: client,
-  //     agency: agency,
-  //     reason: reason,
-  //     idReq: id,
-  //   }
-
-  //   return this.http.post(`${this.uri}/user/submitCancelRequest`, data);
-  // }
-
-  // getCancelRequest(idReq) {
-  //   const data = {
-  //     idReq: idReq,
-  //   }
-
-  //   return this.http.post(`${this.uri}/user/getCancelRequest`, data);
-  // }
 
   getDeclinedRegistrations() {
 
     return this.http.get(`${this.uri}/user/getDeclinedRegistrations`);
   }
 
-  deleteComment(agency, client) {
-    const data = {
-      agency: agency,
-      client: client,
-    }
-
-    return this.http.post(`${this.uri}/user/deleteComment`, data);
-  }
 
   changeUserPassword(email, password) {
     const data = {

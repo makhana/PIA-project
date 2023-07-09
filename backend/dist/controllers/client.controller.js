@@ -7,6 +7,7 @@ exports.ClientController = void 0;
 const agency_1 = __importDefault(require("../models/agency"));
 const client_1 = __importDefault(require("../models/client"));
 const place_1 = __importDefault(require("../models/place"));
+const comment_1 = __importDefault(require("../models/comment"));
 const renovation_requests_1 = __importDefault(require("../models/renovation_requests"));
 const cancellation_1 = __importDefault(require("../models/cancellation"));
 const temp_password_1 = __importDefault(require("../models/temp_password"));
@@ -218,6 +219,51 @@ class ClientController {
                     console.log(err);
                 else
                     res.json(cancelReq);
+            });
+        };
+        this.deleteComment = (req, res) => {
+            let agency = req.body.agency;
+            let client = req.body.client;
+            comment_1.default.deleteOne({ 'agency': agency, 'client': client }, (err, resp) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json({ 'message': 'comment deleted' });
+            });
+        };
+        this.updateComment = (req, res) => {
+            let client = req.body.client;
+            let agency = req.body.agency;
+            let comment = req.body.comment;
+            let rating = req.body.rating;
+            comment_1.default.updateOne({ 'client': client, 'agency': agency }, {
+                $set: {
+                    'comment': comment,
+                    'rating': rating,
+                }
+            }, (err, resp) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json({ 'message': 'comment updated' });
+            });
+        };
+        this.addComment = (req, res) => {
+            let client = req.body.client;
+            let agency = req.body.agency;
+            let comment = req.body.comment;
+            let rating = req.body.rating;
+            let com = new comment_1.default({
+                agency: agency,
+                client: client,
+                comment: comment,
+                rating: rating,
+            });
+            com.save((err, resp) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json({ 'message': 'comment added' });
             });
         };
     }

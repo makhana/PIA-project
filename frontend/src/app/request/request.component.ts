@@ -3,6 +3,7 @@ import { UserService } from '../servers/user.service';
 import { Place } from '../models/place';
 import { Agency } from '../models/agency';
 import { Router } from '@angular/router';
+import { ClientService } from '../servers/client.service';
 
 @Component({
   selector: 'app-request',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class RequestComponent implements OnInit {
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private clientService: ClientService) { }
 
   ngOnInit(): void {
     this.username = localStorage.getItem('username');
@@ -82,7 +83,7 @@ export class RequestComponent implements OnInit {
     
     for(let i = 0; i< this.checkedPlaces.length; i++){
       if(this.checkedPlaces[i] != null){
-        this.userService.requestRenovation(this.agency.username, this.username, this.checkedPlaces[i].id, this.datesStart[i], this.datesEnd[i]).subscribe(resp => {
+        this.clientService.requestRenovation(this.agency.username, this.username, this.checkedPlaces[i].id, this.datesStart[i], this.datesEnd[i]).subscribe(resp => {
           alert(resp['message']);
         })
       }

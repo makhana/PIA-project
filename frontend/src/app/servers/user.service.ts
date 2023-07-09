@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { } 
+  constructor(private http: HttpClient) { }
 
   uri = 'http://localhost:4000';
 
@@ -34,14 +34,14 @@ export class UserService {
     return this.http.post(`${this.uri}/user/loginAdmin`, data);
   }
 
-  fileUpload(file){
- 
+  fileUpload(file) {
+
     return this.http.post(`${this.uri}/upload`, file);
   }
 
-  register(username, password, phone, email, first_name, last_name, name, address, idNumber, description, userType, hasImage){
+  register(username, password, phone, email, first_name, last_name, name, address, idNumber, description, userType, hasImage) {
     var data;
-    if(hasImage){
+    if (hasImage) {
       data = {
         username: username,
         password: password,
@@ -72,47 +72,41 @@ export class UserService {
         image: "default.jpg",
       }
     }
-    
+
     return this.http.post(`${this.uri}/user/register`, data);
   }
 
-  getAllClients(){
+  getAllClients() {
     return this.http.get(`${this.uri}/user/getAllClients`);
   }
-  getAllAgencies(){
+  getAllAgencies() {
     return this.http.get(`${this.uri}/user/getAllAgencies`);
   }
-  getAllAdmins(){
+  getAllAdmins() {
     return this.http.get(`${this.uri}/user/getAllAdmins`);
   }
 
-  sendEmail(to, subject, text){
-    const emailData = {to, subject, text};
+  sendEmail(to, subject, text) {
+    const emailData = { to, subject, text };
     return this.http.post(`${this.uri}/sendEmail`, emailData);
   }
 
-  // getImage(username){
-  //   // const data = {
-  //   //   id: username,
-  //   // }
-  //   return this.http.get(`${this.uri}/file/getImage/` + username);
-  // }
 
-  getClient(username){
+  getClient(username) {
     const data = {
       username: username,
     }
     return this.http.post(`${this.uri}/user/getClient`, data);
   }
 
-  getAgency(username){
+  getAgency(username) {
     const data = {
       username: username,
     }
     return this.http.post(`${this.uri}/user/getAgency`, data);
   }
 
-  updateClientProfile(username, name, surname, email, phone, image){
+  updateClientProfile(username, name, surname, email, phone, image) {
     const data = {
       username: username,
       first_name: name,
@@ -124,7 +118,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/updateClientProfile`, data);
   }
 
-  updateAgencyProfile(username, name, email, phone, address, description, image){
+  updateAgencyProfile(username, name, email, phone, address, description, image) {
     const data = {
       username: username,
       name: name,
@@ -137,7 +131,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/updateAgencyProfile`, data);
   }
 
-  addWorkerRequest(agency, number){
+  addWorkerRequest(agency, number) {
     const data = {
       agency: agency,
       number: number,
@@ -145,36 +139,15 @@ export class UserService {
     return this.http.post(`${this.uri}/user/addWorkerRequest`, data);
   }
 
-  getAllPlaces(username){
+  getAllPlaces(username) {
     const data = {
       client: username,
     }
     return this.http.post(`${this.uri}/user/getAllPlaces`, data);
   }
 
-  addObject(client, type, address, roomNumber, size, roomsArray, doorsArray){
-    const data = {
-      client: client,
-      type: type,
-      address: address,
-      roomNumber: roomNumber,
-      size: size,
-      rooms: roomsArray,
-      doors: doorsArray,
-    }
 
-    return this.http.post(`${this.uri}/user/addObject`, data);
-  }
-
-  deleteObject(id){
-    const data = {
-      id: id,
-    }
-
-    return this.http.post(`${this.uri}/user/deleteObject`, data);
-  }
-
-  getComments(agency){
+  getComments(agency) {
     const data = {
       agency: agency,
     }
@@ -182,7 +155,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/getComments`, data);
   }
 
-  getClientComment(client, agency){
+  getClientComment(client, agency) {
     const data = {
       client: client,
       agency: agency,
@@ -191,43 +164,15 @@ export class UserService {
     return this.http.post(`${this.uri}/user/getClientComment`, data);
   }
 
-  updateObject(id, username, type, address, roomNumber, size, rooms, doors){
-    
-    const data = {
-      id: id,
-      client: username,
-      type: type,
-      address: address,
-      roomNumber: roomNumber,
-      size: size,
-      rooms: rooms,
-      doors: doors,
-    }
 
-    return this.http.post(`${this.uri}/user/updateObject`, data);
-  }
-
-  requestRenovation(agency, client, idPlace, dateStart, dateEnd){
-    
-    const data = {
-      agency: agency,
-      client: client,
-      idPlace: idPlace,
-      dateStart: dateStart,
-      dateEnd: dateEnd,
-    }
-
-    return this.http.post(`${this.uri}/user/requestRenovation`, data);
-  }
-
-  getAllRenovationRequests(username){
+  getAllRenovationRequests(username) {
     const data = {
       client: username,
     }
     return this.http.post(`${this.uri}/user/getAllRenovationRequests`, data);
   }
 
-  getWorkersNumber(agency){
+  getWorkersNumber(agency) {
     const data = {
       agency: agency,
     }
@@ -235,7 +180,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/getWorkersNumber`, data);
   }
 
-  addWorker(agency, name, surname, email, phone, specialization){
+  addWorker(agency, name, surname, email, phone, specialization) {
     const data = {
       agency: agency,
       name: name,
@@ -248,7 +193,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/addWorker`, data);
   }
 
-  getAllWorkers(agency){
+  getAllWorkers(agency) {
     const data = {
       agency: agency,
     }
@@ -256,47 +201,16 @@ export class UserService {
     return this.http.post(`${this.uri}/user/getAllWorkers`, data);
   }
 
-  getAllRenovationRequestsAgency(username){
+  getAllRenovationRequestsAgency(username) {
     const data = {
       agency: username,
     }
     return this.http.post(`${this.uri}/user/getAllRenovationRequestsAgency`, data);
   }
 
-  declineRequest(id){
-    const data = {
-      id: id,
-    }
 
-    return this.http.post(`${this.uri}/user/declineJobRequest`, data);
-  }
 
-  acceptRequest(id, offer){
-    const data = {
-      id: id,
-      offer: offer
-    }
-
-    return this.http.post(`${this.uri}/user/acceptJobRequest`, data);
-  }
-
-  acceptClientOffer(id){
-    const data = {
-      id: id,
-    }
-
-    return this.http.post(`${this.uri}/user/acceptClientOffer`, data);
-  }
-
-  declineClientOffer(id){
-    const data = {
-      id: id,
-    }
-
-    return this.http.post(`${this.uri}/user/declineClientOffer`, data);
-  }
-
-  finishJob(id){
+  finishJob(id) {
     const data = {
       id: id,
     }
@@ -304,7 +218,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/finishJob`, data);
   }
 
-  takeWorker(id){
+  takeWorker(id) {
     const data = {
       id: id,
     }
@@ -312,7 +226,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/takeWorker`, data);
   }
 
-  freeWorker(id){
+  freeWorker(id) {
     const data = {
       id: id,
     }
@@ -320,7 +234,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/freeWorker`, data);
   }
 
-  colorGreen(id, width, height, x, y){
+  colorGreen(id, width, height, x, y) {
     const data = {
       id: id,
       color: "green",
@@ -333,8 +247,8 @@ export class UserService {
     return this.http.post(`${this.uri}/user/colorObject`, data);
   }
 
-  
-  colorRed(id, width, height, x, y){
+
+  colorRed(id, width, height, x, y) {
     const data = {
       id: id,
       color: "red",
@@ -347,7 +261,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/colorObject`, data);
   }
 
-  colorGold(id, width, height, x, y){
+  colorGold(id, width, height, x, y) {
     const data = {
       id: id,
       color: "gold",
@@ -360,7 +274,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/colorObject`, data);
   }
 
-  updateComment(client, agency, comment, rating){
+  updateComment(client, agency, comment, rating) {
     const data = {
       client: client,
       agency: agency,
@@ -371,7 +285,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/updateComment`, data);
   }
 
-  addComment(client, agency, comment, rating){
+  addComment(client, agency, comment, rating) {
     const data = {
       client: client,
       agency: agency,
@@ -382,31 +296,31 @@ export class UserService {
     return this.http.post(`${this.uri}/user/addComment`, data);
   }
 
-  submitCancelRequest(client, agency, reason, id){
-    const data = {
-      client: client,
-      agency: agency,
-      reason: reason,
-      idReq: id,
-    }
+  // submitCancelRequest(client, agency, reason, id) {
+  //   const data = {
+  //     client: client,
+  //     agency: agency,
+  //     reason: reason,
+  //     idReq: id,
+  //   }
 
-    return this.http.post(`${this.uri}/user/submitCancelRequest`, data);
-  }
+  //   return this.http.post(`${this.uri}/user/submitCancelRequest`, data);
+  // }
 
-  getCancelRequest(idReq){
-    const data = {
-      idReq: idReq,
-    }
+  // getCancelRequest(idReq) {
+  //   const data = {
+  //     idReq: idReq,
+  //   }
 
-    return this.http.post(`${this.uri}/user/getCancelRequest`, data);
-  }
+  //   return this.http.post(`${this.uri}/user/getCancelRequest`, data);
+  // }
 
-  getDeclinedRegistrations(){
+  getDeclinedRegistrations() {
 
     return this.http.get(`${this.uri}/user/getDeclinedRegistrations`);
   }
 
-  deleteComment(agency, client){
+  deleteComment(agency, client) {
     const data = {
       agency: agency,
       client: client,
@@ -415,7 +329,7 @@ export class UserService {
     return this.http.post(`${this.uri}/user/deleteComment`, data);
   }
 
-  changeUserPassword(email, password){
+  changeUserPassword(email, password) {
     const data = {
       email: email,
       password: password,
@@ -424,15 +338,23 @@ export class UserService {
     return this.http.post(`${this.uri}/user/changeUserPassword`, data);
   }
 
-  changeUserPasswordUsername(username, password){
+
+  addTemporaryPassword(password, email) {
     const data = {
-      username: username,
+      email: email,
       password: password,
     }
 
-    return this.http.post(`${this.uri}/user/changeUserPasswordUsername`, data);
+    return this.http.post(`${this.uri}/user/addTemporaryPassword`, data);
   }
 
+  checkTime(user) {
+    const data = {
+      user: user,
+    }
+
+    return this.http.post(`${this.uri}/user/checkTime`, data);
+  }
 
 
 

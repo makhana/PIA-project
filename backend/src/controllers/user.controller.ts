@@ -10,6 +10,8 @@ import RenovationReqModel from '../models/renovation_requests'
 import WorkerRequestModel from '../models/worker_request'
 import WorkerModel from '../models/worker'
 import CancelModel from '../models/cancellation'
+import TempPassModel from '../models/temp_password'
+
 
 
 export class UserController {
@@ -124,22 +126,9 @@ export class UserController {
         })
     }
 
-    // getImage = (req: express.Request, res: express.Response) => {
-    //     const fs = require('fs')
-    //     try{
-    //         fs.readFile('uploads/'+ req.params.id, function(err, data) {
 
-    //           if (err) throw err;
-    //           else {
-    //             res.writeHead(200, {'Content-Type': 'image/jpeg'});
-    //             res.end(data); 
-    //           }
-    //         });
-    //       }catch{
-    //         console.log("Doslo je do greske prilikom ucitavanja slike");
-    //         res.status(400);
-    //       }
-    // }
+
+
 
     getClient = (req: express.Request, res: express.Response) => {
         let username = req.body.username;
@@ -156,6 +145,112 @@ export class UserController {
         AgencyModel.findOne({ 'username': username }, (err, agency) => {
             if (err) console.log(err);
             else res.json(agency)
+        })
+    }
+
+    addTemporaryPassword = (req: express.Request, res: express.Response) => {
+
+        let email = req.body.email;
+        let password = req.body.password;
+        let date = new Date();
+
+        ClientModel.findOne({ 'email': email }, (err, client) => {
+            if (err) console.log(err)
+            else {
+                if(client){
+                    let temp = new TempPassModel({
+                        user: client['username'],
+                        oldPassword: client['password'],
+                        tempPassword: password,
+                        timestamp: date.getTime(),
+                        deadline: date.getTime() + 10 * 60 * 1000
+                    })
+    
+                    temp.save((err, resp) => {
+                        if (err) console.log(err);
+                        else res.json({ 'message': 'temp password added' });
+                    })
+                } else {
+                    AgencyModel.findOne({'email': email}, (err, agency) => {
+                        if(err) console.log(err);
+                        else {
+                            if(agency){
+                                let temp = new TempPassModel({
+                                    user: agency['username'],
+                                    oldPassword: agency['password'],
+                                    tempPassword: password,
+                                    timestamp: date.getTime(),
+                                    deadline: date.getTime() + 10 * 60 * 1000
+                                })
+                
+                                temp.save((err, resp) => {
+                                    if (err) console.log(err);
+                                    else res.json({ 'message': 'temp password added' });
+                                })
+                            } else {
+                                res.json({ 'message': 'wrong email' });
+                            }
+                        }
+                    })
+                }
+                
+            }
+        })
+    }
+
+    checkTime = (req: express.Request, res: express.Response) => {
+
+        let user = req.body.user;
+        let date = new Date();
+
+        TempPassModel.findOne({ 'user': user }, (err, pass) => {
+            if (err) console.log(err);
+            else {
+                if (pass) {
+                    if (date.getTime() > pass['deadline']) {
+                        ClientModel.findOne({'username': user}, (err, client)=> {
+                            if(err) console.log(err);
+                            else {
+                                if(client){
+                                    ClientModel.updateOne({ 'username': user }, {
+                                        $set: {
+                                            'password': pass['oldPassword']
+                                        }
+                                    }, (err, resp) => {
+                                        if (err) console.log(err);
+                                        else {
+                                            TempPassModel.deleteOne({ 'user': user }, (err, resp) => {
+                                                if(err) console.log(err)
+                                                else res.json({ 'message': 'password was set to OLD' })
+                                            })
+                                        }
+                                    })
+                                } else {
+                                    AgencyModel.updateOne({ 'username': user }, {
+                                        $set: {
+                                            'password': pass['oldPassword']
+                                        }
+                                    }, (err, resp) => {
+                                        if (err) console.log(err);
+                                        else {
+                                            TempPassModel.deleteOne({ 'user': user }, (err, resp) => {
+                                                if(err) console.log(err)
+                                                else res.json({ 'message': 'password was set to OLD' })
+                                            })
+                                        }
+                                    })
+                                }
+                            }
+                        })
+                       
+                    } else {
+                        res.json({ 'message': 'deadline didn\'t pass' })
+                    }
+                } else {
+                    res.json({ 'message': 'password is okay' })
+                }
+
+            }
         })
     }
 
@@ -248,62 +343,6 @@ export class UserController {
         })
     }
 
-    addObject = (req: express.Request, res: express.Response) => {
-
-        let client = req.body.client;
-        let type = req.body.type;
-        let address = req.body.address;
-        let roomNumber = req.body.roomNumber;
-        let size = req.body.size;
-        let rooms = req.body.rooms;
-        let doors = req.body.doors;
-
-        PlaceModel.find({}, (err, resp) => {
-            if (err) console.log(err);
-            else {
-                let max_id = 0;
-                for (let r of resp) {
-                    if (r['id'] > max_id) {
-                        max_id = r['id'];
-                    }
-                }
-
-                let place = new PlaceModel({
-                    client: client,
-                    type: type,
-                    address: address,
-                    roomNumber: roomNumber,
-                    size: size,
-                    rooms: rooms,
-                    doors: doors,
-                    id: (max_id + 1),
-                })
-
-                place.save((err, resp) => {
-                    if (err) console.log(err);
-                    else res.json({ 'message': 'object added' });
-                })
-
-            }
-        })
-    }
-
-    deleteObject = (req: express.Request, res: express.Response) => {
-
-        let id = req.body.id;
-
-        PlaceModel.deleteOne({ 'id': id }, (err, resp) => {
-            if (err) console.log(err);
-            else {
-                RenovationReqModel.deleteMany({'idPlace': id}, (err, resp)=> {
-                    if(err) console.log(err);
-                    else res.json({ 'message': 'object deleted' });
-                })
-                
-            }
-        })
-
-    }
 
     getComments = (req: express.Request, res: express.Response) => {
 
@@ -328,74 +367,6 @@ export class UserController {
 
     }
 
-    updateObject = (req: express.Request, res: express.Response) => {
-
-        let id = req.body.id;
-        let client = req.body.client;
-        let type = req.body.type;
-        let address = req.body.address;
-        let roomNumber = req.body.roomNumber;
-        let size = req.body.size;
-        let rooms = req.body.rooms;
-        let doors = req.body.doors;
-
-        PlaceModel.updateOne({ 'id': id }, {
-            $set: {
-                'client': client,
-                'type': type,
-                'address': address,
-                'roomNumber': roomNumber,
-                'size': size,
-                'rooms': rooms,
-                'doors': doors
-            }
-        }, (err, resp) => {
-            if (err) console.log(err);
-            else res.json({ 'message': 'object updated' });
-        })
-
-    }
-
-    requestRenovation = (req: express.Request, res: express.Response) => {
-
-
-        let agency = req.body.agency;
-        let client = req.body.client;
-        let idPlace = req.body.idPlace;
-        let dateStart = req.body.dateStart;
-        let dateEnd = req.body.dateEnd;
-
-
-        RenovationReqModel.find({}, (err, resp) => {
-            if (err) console.log(err);
-            else {
-                let max_id = 0;
-                for (let r of resp) {
-                    if (r['id'] > max_id) {
-                        max_id = r['id'];
-                    }
-                }
-
-                let ren = new RenovationReqModel({
-                    id: (max_id + 1),
-                    agency: agency,
-                    client: client,
-                    idPlace: idPlace,
-                    dateStart: dateStart,
-                    dateEnd: dateEnd,
-                    status: "pending",
-                    offer: 0,
-                })
-
-                ren.save((err, resp) => {
-                    if (err) console.log(err);
-                    else res.json({ 'message': 'renovation request added' });
-                })
-
-            }
-        })
-    }
-
     getAllRenovationRequests = (req: express.Request, res: express.Response) => {
 
         let client = req.body.client;
@@ -414,64 +385,6 @@ export class UserController {
         RenovationReqModel.find({ 'agency': agency }, (err, requests) => {
             if (err) console.log(err);
             else res.json(requests);
-        })
-
-    }
-
-    declineJobRequest = (req: express.Request, res: express.Response) => {
-
-        let id = req.body.id;
-
-        RenovationReqModel.updateOne({ 'id': id }, {
-            $set: {
-                'status': "declined",
-            }
-        }, (err, resp) => {
-            if (err) console.log(err);
-            else res.json({ 'message': "job request declined" });
-        })
-
-    }
-
-    acceptJobRequest = (req: express.Request, res: express.Response) => {
-
-        let id = req.body.id;
-        let offer = req.body.offer;
-
-        RenovationReqModel.updateOne({ 'id': id }, {
-            $set: {
-                'status': "accepted",
-                'offer': offer,
-            }
-        }, (err, resp) => {
-            if (err) console.log(err);
-            else res.json({ 'message': "job request accepted" });
-        })
-
-    }
-
-    acceptClientOffer = (req: express.Request, res: express.Response) => {
-
-        let id = req.body.id;
-
-        RenovationReqModel.updateOne({ 'id': id }, {
-            $set: {
-                'status': "active",
-            }
-        }, (err, resp) => {
-            if (err) console.log(err);
-            else res.json({ 'message': "job offer accepted by client" });
-        })
-
-    }
-
-    declineClientOffer = (req: express.Request, res: express.Response) => {
-
-        let id = req.body.id;
-
-        RenovationReqModel.deleteOne({ 'id': id }, (err, resp) => {
-            if (err) console.log(err);
-            else res.json({ 'message': "job offer deleted by client" });
         })
 
     }
@@ -674,35 +587,35 @@ export class UserController {
 
     }
 
-    submitCancelRequest = (req: express.Request, res: express.Response) => {
+    // submitCancelRequest = (req: express.Request, res: express.Response) => {
 
-        let client = req.body.client;
-        let agency = req.body.agency;
-        let reason = req.body.reason;
-        let idReq = req.body.idReq;
+    //     let client = req.body.client;
+    //     let agency = req.body.agency;
+    //     let reason = req.body.reason;
+    //     let idReq = req.body.idReq;
 
-        let canc = new CancelModel({
-            client: client,
-            agency: agency,
-            reason: reason,
-            idReq: idReq,
-        })
+    //     let canc = new CancelModel({
+    //         client: client,
+    //         agency: agency,
+    //         reason: reason,
+    //         idReq: idReq,
+    //     })
 
-        canc.save((err, resp) => {
-            if (err) console.log(err);
-            else res.json({ 'message': 'cancellation request added' });
-        })
-    }
+    //     canc.save((err, resp) => {
+    //         if (err) console.log(err);
+    //         else res.json({ 'message': 'cancellation request added' });
+    //     })
+    // }
 
-    getCancelRequest = (req: express.Request, res: express.Response) => {
+    // getCancelRequest = (req: express.Request, res: express.Response) => {
 
-        let idReq = req.body.idReq;
+    //     let idReq = req.body.idReq;
 
-        CancelModel.findOne({ 'idReq': idReq }, (err, cancelReq) => {
-            if (err) console.log(err);
-            else res.json(cancelReq);
-        })
-    }
+    //     CancelModel.findOne({ 'idReq': idReq }, (err, cancelReq) => {
+    //         if (err) console.log(err);
+    //         else res.json(cancelReq);
+    //     })
+    // }
 
     getDeclinedRegistrations = (req: express.Request, res: express.Response) => {
 
@@ -743,38 +656,6 @@ export class UserController {
                     })
                 } else {
                     AgencyModel.updateOne({ 'email': email }, {
-                        $set: {
-                            'password': password,
-                        }
-                    }, (err, resp) => {
-                        if (err) console.log(err);
-                        else res.json({ 'message': 'agency password updated' })
-                    })
-                }
-            }
-        })
-
-    }
-
-    changeUserPasswordUsername = (req: express.Request, res: express.Response) => {
-
-        let username = req.body.username;
-        let password = req.body.password;
-
-        ClientModel.findOne({ 'username': username }, (err, client) => {
-            if (err) console.log(err);
-            else {
-                if (client) {
-                    ClientModel.updateOne({ 'username': username }, {
-                        $set: {
-                            'password': password,
-                        }
-                    }, (err, resp) => {
-                        if (err) console.log(err);
-                        else res.json({ 'message': 'client password updated' })
-                    })
-                } else {
-                    AgencyModel.updateOne({ 'username': username }, {
                         $set: {
                             'password': password,
                         }

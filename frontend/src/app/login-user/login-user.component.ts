@@ -12,6 +12,13 @@ export class LoginUserComponent implements OnInit {
   constructor(private router: Router, private userService: UserService) { }
 
   ngOnInit(): void {
+    this.username = "";
+    this.password = "";
+    this.message = "";
+    this.passwordForm = false;
+    this.email = "";
+    this.type = "";
+    this.regType = "";
   }
 
   username: string = "";
@@ -24,23 +31,31 @@ export class LoginUserComponent implements OnInit {
 
   login() {
     if (this.type == 'client') {
-      this.userService.loginClient(this.username, this.password).subscribe(user => {
-        if (user == null) {
-          this.message = "Invalid information";
-        } else {
-          localStorage.setItem('username', this.username);
-          this.router.navigate(["client"]);
-        }
+      this.userService.checkTime(this.username).subscribe(resp => {
+        console.log(resp['message']);
+        this.userService.loginClient(this.username, this.password).subscribe(user => {
+          if (user == null) {
+            this.message = "Invalid information";
+          } else {
+            localStorage.setItem('username', this.username);
+            this.router.navigate(["client"]);
+          }
+        })
       })
+
     } else if (this.type == 'agency') {
-      this.userService.loginAgency(this.username, this.password).subscribe(user => {
-        if (user == null) {
-          this.message = "Invalid login information";
-        } else {
-          localStorage.setItem('username', this.username);
-          this.router.navigate(["agency"]);
-        }
+      this.userService.checkTime(this.username).subscribe(resp => {
+        console.log(resp['message']);
+        this.userService.loginAgency(this.username, this.password).subscribe(user => {
+          if (user == null) {
+            this.message = "Invalid login information";
+          } else {
+            localStorage.setItem('username', this.username);
+            this.router.navigate(["agency"]);
+          }
+        })
       })
+
     }
   }
 
@@ -76,16 +91,25 @@ export class LoginUserComponent implements OnInit {
 
 
 
-    this.userService.changeUserPassword(this.email, randomString).subscribe(resp => {
-      if(resp){
-        console.log(resp['message']);
-        this.userService.sendEmail(this.email, "Reset password", randomString).subscribe(resp => {
-          console.log(resp['message']);
-        })
+    this.userService.addTemporaryPassword(randomString, this.email).subscribe(resp => {
+      if (resp['message'] == 'wrong email') {
+        alert(resp['message']);
       } else {
-        this.message = "Email provided is not valid";
+        console.log(resp['message']);
       }
+      this.userService.changeUserPassword(this.email, randomString).subscribe(resp => {
+        if (resp) {
+          console.log(resp['message']);
+          this.userService.sendEmail(this.email, "Reset password", "Temporary password for reset: " + randomString).subscribe(resp => {
+            console.log(resp['message']);
+            this.ngOnInit();
+          })
+        } else {
+          this.message = "Email provided is not valid";
+        }
+      })
     })
+
   }
 
   back() {

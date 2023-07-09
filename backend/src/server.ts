@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import userRouter from './routers/user.router';
 import ImageModel from './models/image';
 import adminRouter from './routers/admin.router';
+import clientRouter from './routers/client.router';
+import agencyRouter from './routers/agency.router';
 
 
 
@@ -23,6 +25,8 @@ connection.once('open', ()=>{
 const router = express.Router();
 router.use('/user', userRouter);
 router.use('/admin', adminRouter);
+router.use('/client', clientRouter);
+router.use('/agency', agencyRouter);
 
 
 //////////////// FILE UPLOAD /////////////////

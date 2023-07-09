@@ -18,74 +18,93 @@
 
 
 <div class="container d-flex justify-content-center align-items-center">
-    <div class="row">
-        <div class="col-6">
-            <h2 class="display-3">Add Object</h2>
-            <form class="was-validated" #myForm="ngForm">
-                <div class="form-group">
-                    <label for="t" class="form-label">Choose type of Object</label>
-                    <select id="t" [(ngModel)]="objectType" name="type" required [disabled]="jsonData.length != 0">
-                        <option value="apartment">Apartment</option>
-                        <option value="house">House</option>
-                    </select>
+    <div class="main-body">
+        <div class="row">
+            <div class="col-6">
+                <h2 class="display-3">Add Object</h2>
+                <form class="was-validated" #myForm="ngForm">
+                    <div class="form-group">
+                        <label for="t" class="form-label">Choose type of Object</label>
+                        <select id="t" [(ngModel)]="objectType" name="type" required [disabled]="jsonData.length != 0">
+                            <option value="apartment">Apartment</option>
+                            <option value="house">House</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" [(ngModel)]="address" id="address" placeholder="Enter address"
+                            class="form-control" name="username" required [disabled]="jsonData.length != 0">
+                        <div class="valid-feedback">Valid.</div>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rooms">Number of rooms</label>
+                        <input type="number" [(ngModel)]="rooms" id="rooms" placeholder="Enter number of rooms"
+                            class="form-control" name="rooms" required max="3" min="1"
+                            [disabled]="rectangles.length != 0 || jsonData.length != 0">
+                        <div class="valid-feedback">Valid.</div>
+                        <div class="invalid-feedback">Please fill out this field. Not larger than 3.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="size">Size in square meters</label>
+                        <input type="number" [(ngModel)]="size" id="size" placeholder="Enter size" class="form-control"
+                            name="size" required [disabled]="jsonData.length != 0" min="1">
+                        <div class="valid-feedback">Valid.</div>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-warning" (click)="submit()"
+                        [disabled]="(!myForm.valid || doorError == true) && jsonData.length == 0">Submit</button>
+
+
+                </form>
+                <div class="row">
+                    <label for="width" class="form-label">width</label>
+                    <input type="number" id="width" [(ngModel)]="width" name="width" class="form-control"
+                        [disabled]="jsonData.length != 0">
+                    <label for="height" class="form-label">height</label>
+                    <input type="number" id="height" [(ngModel)]="height" name="height" class="form-control"
+                        [disabled]="jsonData.length != 0">
                 </div>
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" [(ngModel)]="address" id="address" placeholder="Enter address"
-                        class="form-control" name="username" required [disabled]="jsonData.length != 0">
-                    <div class="valid-feedback">Valid.</div>
-                    <div class="invalid-feedback">Please fill out this field.</div>
+                <div class="row">
+                    <div *ngFor="let rec of rectangles; let i=index">
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group row">
+                                    <label for="room" class="col-sm-4 col-form-label">Room {{i+1}}:</label>
+                                    <button class="btn btn-warning col-sm-4" (click)="addDoor(rec)">Add door</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="rooms">Number of rooms</label>
-                    <input type="number" [(ngModel)]="rooms" id="rooms" placeholder="Enter number of rooms"
-                        class="form-control" name="rooms" required max="3" min="1"
-                        [disabled]="rectangles.length != 0 || jsonData.length != 0">
-                    <div class="valid-feedback">Valid.</div>
-                    <div class="invalid-feedback">Please fill out this field. Not larger than 3.</div>
+            <div class="col-6">
+                <canvas id="canvas" class="explore_area" width="400" height="400"></canvas>
+                <div class="row">
+                    <div class="col-8">
+                        <!-- <button class="btn btn-outline-dark" (click)="addAllDoors()" [disabled]="jsonData.length != 0">Add
+                            doors</button> -->
+                        <button class="btn btn-outline-dark" (click)="clearCanvasButton()">Clear canvas</button>
+                    </div>
+
+                    <div>
+                        <input class="form-control" type="file" accept=".json" (change)="onFileSelected($event)">
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="size">Size in square meters</label>
-                    <input type="number" [(ngModel)]="size" id="size" placeholder="Enter size" class="form-control"
-                        name="size" required [disabled]="jsonData.length != 0" min="1">
-                    <div class="valid-feedback">Valid.</div>
-                    <div class="invalid-feedback">Please fill out this field.</div>
+                
+                <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="message != ''">
+                    {{message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                        (click)="closeMessage()"></button>
                 </div>
-
-
-                <button type="submit" class="btn btn-primary" (click)="submit()"
-                    [disabled]="(!myForm.valid || doorError == true) && jsonData.length == 0">Submit</button>
-
-
-            </form>
-            <div class="">
-                <label for="width" class="form-label">width</label>
-                <input type="number" id="width" [(ngModel)]="width" name="width" class="form-control"
-                    [disabled]="jsonData.length != 0">
-                <label for="height" class="form-label">height</label>
-                <input type="number" id="height" [(ngModel)]="height" name="height" class="form-control"
-                    [disabled]="jsonData.length != 0">
             </div>
         </div>
-        <div class="col-6">
-            <canvas id="canvas" class="explore_area" width="400" height="400"></canvas>
-            <div class="row">
-                <div class="col-8">
-                    <button class="btn btn-outline-dark" (click)="addDoors()" [disabled]="jsonData.length != 0">Add
-                        doors</button>
-                    <button class="btn btn-outline-dark" (click)="clearCanvasButton()">Clear canvas</button>
-                </div>
-
-                <div>
-                    <input class="form-control" type="file" accept=".json" (change)="onFileSelected($event)">
-                </div>
-            </div>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="message != ''">
-                {{message}}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="closeMessage()"></button>
-            </div>
-        </div>
+        
     </div>
+
 </div>

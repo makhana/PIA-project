@@ -18,6 +18,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const user_router_1 = __importDefault(require("./routers/user.router"));
 const image_1 = __importDefault(require("./models/image"));
 const admin_router_1 = __importDefault(require("./routers/admin.router"));
+const client_router_1 = __importDefault(require("./routers/client.router"));
+const agency_router_1 = __importDefault(require("./routers/agency.router"));
 const express = require('express');
 const app = express();
 app.use((0, cors_1.default)());
@@ -30,6 +32,8 @@ connection.once('open', () => {
 const router = express.Router();
 router.use('/user', user_router_1.default);
 router.use('/admin', admin_router_1.default);
+router.use('/client', client_router_1.default);
+router.use('/agency', agency_router_1.default);
 //////////////// FILE UPLOAD /////////////////
 const multer = require('multer');
 const storage = multer.diskStorage({

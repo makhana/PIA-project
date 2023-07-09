@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../servers/user.service';
 import { Client } from '../models/client';
 import { Agency } from '../models/agency';
+import { ClientService } from '../servers/client.service';
 
 @Component({
   selector: 'app-change-password',
@@ -11,7 +12,7 @@ import { Agency } from '../models/agency';
 })
 export class ChangePasswordComponent implements OnInit {
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(private router: Router, private userService: UserService, private clientService: ClientService) { }
 
   username: string;
   userType: string;
@@ -65,7 +66,7 @@ export class ChangePasswordComponent implements OnInit {
         this.message = "New password and confirmed password are not the same";
         return;
       }
-      this.userService.changeUserPasswordUsername(this.username, this.passwordNew).subscribe(resp => {
+      this.clientService.changeUserPasswordUsername(this.username, this.passwordNew).subscribe(resp => {
         console.log(resp['message']);
         sessionStorage.clear();
         this.router.navigate([""]);
@@ -80,7 +81,7 @@ export class ChangePasswordComponent implements OnInit {
         this.message = "New password and confirmed password are not the same";
         return;
       }
-      this.userService.changeUserPasswordUsername(this.username, this.passwordNew).subscribe(resp => {
+      this.clientService.changeUserPasswordUsername(this.username, this.passwordNew).subscribe(resp => {
         console.log(resp['message']);
         sessionStorage.clear();
         this.router.navigate([""]);

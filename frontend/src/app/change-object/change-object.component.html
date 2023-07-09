@@ -49,12 +49,12 @@
                 </div>
 
 
-                <button type="submit" class="btn btn-primary" (click)="submit()"
+                <button type="submit" class="btn btn-warning" (click)="submit()"
                     [disabled]="(doorError == true) && jsonData.length == 0">Submit</button>
 
 
             </form>
-            <div class="">
+            <div class="row">
                 <label for="width" class="form-label">width</label>
                 <input type="number" id="width" [(ngModel)]="width" name="width" class="form-control"
                     [disabled]="jsonData.length != 0">
@@ -62,13 +62,23 @@
                 <input type="number" id="height" [(ngModel)]="height" name="height" class="form-control"
                     [disabled]="jsonData.length != 0">
             </div>
+            <div class="row">
+                <div *ngFor="let rec of rectangles; let i=index">
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group row">
+                                <label for="room" class="col-sm-4 col-form-label">Room {{i+1}}:</label>
+                                <button class="btn btn-warning col-sm-4" (click)="addDoor(rec)">Add door</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-6">
-            <canvas id="canvas" class="explore_area" width="600" height="400"></canvas>
+            <canvas id="canvas" class="explore_area" width="400" height="400"></canvas>
             <div class="row">
                 <div class="col-8">
-                    <button class="btn btn-outline-dark" (click)="addDoors()" [disabled]="jsonData.length != 0">Add
-                        doors</button>
                     <button class="btn btn-outline-dark" (click)="clearCanvasButton()">Clear canvas</button>
                 </div>
 

@@ -8,6 +8,7 @@ import { RenovationRequest } from '../models/renRequest';
 import { Place } from '../models/place';
 import { Client } from '../models/client';
 import { Rectangle } from '../models/rectangle';
+import { AgencyService } from '../servers/agency.service';
 
 @Component({
   selector: 'app-agencija',
@@ -16,11 +17,14 @@ import { Rectangle } from '../models/rectangle';
 })
 export class AgencijaComponent implements OnInit {
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private agencyService: AgencyService) { }
 
   username: string;
   agency: Agency;
   edit: boolean;
+
+  isLoading: boolean;
+  isLoadingTables: boolean;
 
   selectedImage: any;
   invalidImage: number = 0;
@@ -30,6 +34,9 @@ export class AgencijaComponent implements OnInit {
   name: string;
   address: string;
   description: string;
+  country: string;
+  city: string;
+  street: string;
 
   message: string;
 
@@ -58,6 +65,9 @@ export class AgencijaComponent implements OnInit {
     this.name = "";
     this.address = "";
     this.description = "";
+    this.country = "";
+    this.city = "";
+    this.street = "";
 
     this.allWorkers = [];
     this.numberOfWorkersAllowed = 0;
@@ -69,19 +79,15 @@ export class AgencijaComponent implements OnInit {
 
     this.offer = 0;
 
+    this.isLoading = false;
+    this.isLoadingTables = false;
+
     this.username = localStorage.getItem('username');
     this.userService.getAgency(this.username).subscribe((agencyDB: Agency) => {
       this.agency = agencyDB;
-      console.log(agencyDB)
       this.numberOfWorkersAllowed = this.agency.numberOfWorkers;
+      this.isLoading = true;
     })
-
-    // this.userService.getWorkersNumber(this.username).subscribe((wr: WorkersRequest) => {
-    //   if (wr.status == 'approved') {
-    //     this.numberOfWorkersAllowed = wr.number;
-
-    //   }
-    // })
 
     this.userService.getAllWorkers(this.username).subscribe((workers: WorkerAgency[]) => {
       this.allWorkers = workers;
@@ -94,6 +100,7 @@ export class AgencijaComponent implements OnInit {
       
       for (let req of requestsDB) {
         this.userService.getAllPlaces(req.client).subscribe((placesDB: Place[]) => {
+          
           for (let p of placesDB) {
             if (req.idPlace == p.id) {
               req.place = p;
@@ -104,20 +111,20 @@ export class AgencijaComponent implements OnInit {
             req.clientName = client.first_name;
             req.clientSurname = client.last_name;
             this.userService.getAgency(this.username).subscribe((agency: Agency) => {
+              this.isLoadingTables = true;
               req.agencyName = agency.name;
             })
           })
         })
       }
       this.allJobRequests = requestsDB;
+     
     })
 
 
     const canvas = <HTMLCanvasElement>document.getElementById('canvas');
     this.ctx = canvas.getContext('2d');
 
-    // this.canvas = new fabric.Canvas('canvas');
-    // this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas))
     this.ctx.fillStyle = 'white'
     this.ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
@@ -149,8 +156,10 @@ export class AgencijaComponent implements OnInit {
     if (this.phone == "") {
       this.phone = this.agency.phone;
     }
-    if (this.address == "") {
+    if (this.city == "" || this.country == "" || this.street == "") {
       this.address = this.agency.address;
+    } else {
+      this.address = this.country + ", " + this.city + ", " + this.street;
     }
     if (this.description == "") {
       this.description = this.agency.description;
@@ -218,7 +227,7 @@ export class AgencijaComponent implements OnInit {
   }
 
   decline(id) {
-    this.userService.declineRequest(id).subscribe(resp => {
+    this.agencyService.declineRequest(id).subscribe(resp => {
       console.log(resp['message']);
       this.ngOnInit();
     })
@@ -230,7 +239,7 @@ export class AgencijaComponent implements OnInit {
       return;
     }
     console.log(id)
-    this.userService.acceptRequest(id, this.offer).subscribe(resp => {
+    this.agencyService.acceptRequest(id, this.offer).subscribe(resp => {
       console.log(resp['message']);
       this.ngOnInit();
     })

@@ -144,7 +144,7 @@ export class AdminComponent implements OnInit {
 
   acceptClient(req) {
     if (req.image == "default.jpg") {
-      this.adminService.addClient(req.ussername, req.password, req.phone, req.email, req.first_name, req.last_name, 0).subscribe(resp => {
+      this.adminService.addClient(req.username, req.password, req.phone, req.email, req.first_name, req.last_name, 0).subscribe(resp => {
         console.log(resp['message']);
         //DELETE REQ
         this.adminService.deleteRegistration(req.id).subscribe(resp => {

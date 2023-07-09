@@ -7,6 +7,7 @@ import { Rectangle } from '../models/rectangle';
 import { Agency } from '../models/agency';
 import { RenovationRequest } from '../models/renRequest';
 import { CancelReq } from '../models/cancelReq';
+import { ClientService } from '../servers/client.service';
 
 @Component({
   selector: 'app-klijent',
@@ -15,7 +16,7 @@ import { CancelReq } from '../models/cancelReq';
 })
 export class KlijentComponent implements OnInit {
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(private router: Router, private userService: UserService, private clientService: ClientService) { }
 
   private ctx: CanvasRenderingContext2D;
 
@@ -54,6 +55,8 @@ export class KlijentComponent implements OnInit {
 
   reason: string;
 
+  isLoaded: boolean;
+
   ngOnInit(): void {
     this.showRenovation = "all";
     this.first_name = "";
@@ -81,6 +84,8 @@ export class KlijentComponent implements OnInit {
 
     this.renovationRequests = [];
 
+    this.isLoaded =  false;
+
 
     this.username = localStorage.getItem('username');
 
@@ -88,6 +93,7 @@ export class KlijentComponent implements OnInit {
     this.userService.getClient(this.username).subscribe((client: Client) => {
       if (client) {
         this.client = client;
+        this.isLoaded = true;
       }
     })
 
@@ -297,7 +303,7 @@ export class KlijentComponent implements OnInit {
   }
   deleteObject(place) {
 
-    this.userService.deleteObject(place.id).subscribe(resp => {
+    this.clientService.deleteObject(place.id).subscribe(resp => {
       console.log(resp['message']);
       this.ngOnInit();
     })
@@ -413,21 +419,21 @@ export class KlijentComponent implements OnInit {
   }
 
   acceptOffer(id) {
-    this.userService.acceptClientOffer(id).subscribe(resp => {
+    this.clientService.acceptClientOffer(id).subscribe(resp => {
       console.log(resp['message']);
       this.ngOnInit();
     })
   }
 
   declineOffer(id) {
-    this.userService.declineClientOffer(id).subscribe(resp => {
+    this.clientService.declineClientOffer(id).subscribe(resp => {
       console.log(resp['message']);
       this.ngOnInit();
     })
   }
 
   pay(id) {
-    this.userService.getCancelRequest(id).subscribe((cancelReq: CancelReq) => {
+    this.clientService.getCancelRequest(id).subscribe((cancelReq: CancelReq) => {
       if (cancelReq) {
         this.message = "You sent cancel request"
       } else {
@@ -450,11 +456,11 @@ export class KlijentComponent implements OnInit {
 
 
   submit(ren) {
-    this.userService.getCancelRequest(ren.id).subscribe((cancelReq: CancelReq) => {
+    this.clientService.getCancelRequest(ren.id).subscribe((cancelReq: CancelReq) => {
       if (cancelReq) {
         this.message = "You already sent cancel request"
       } else {
-        this.userService.submitCancelRequest(this.username, ren.agency, this.reason, ren.id).subscribe(resp => {
+        this.clientService.submitCancelRequest(this.username, ren.agency, this.reason, ren.id).subscribe(resp => {
           console.log(resp['message']);
           this.ngOnInit();
         })

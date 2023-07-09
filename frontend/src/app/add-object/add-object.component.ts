@@ -4,6 +4,7 @@ import { UserService } from '../servers/user.service';
 import { fabric } from 'fabric';
 import { Rectangle } from '../models/rectangle';
 import { Place } from '../models/place';
+import { ClientService } from '../servers/client.service';
 
 @Component({
   selector: 'app-add-object',
@@ -17,6 +18,7 @@ export class AddObjectComponent implements OnInit {
   doors: Rectangle[] = [];
   private selectedRectangle: Rectangle = null;
   private selectedDoor: Rectangle = null;
+  private selectedDoorsArray: Rectangle[] = [];
   private isDraggingRectangle = false;
   private isDraggingDoor = false;
   private prevMouseX = 0;
@@ -43,7 +45,7 @@ export class AddObjectComponent implements OnInit {
   username: string;
   
 
-  constructor(private router: Router, private userService: UserService, private renderer: Renderer2) { }
+  constructor(private router: Router, private clientService: ClientService, private renderer: Renderer2) { }
 
   ngOnInit(): void {
     this.username = localStorage.getItem('username');
@@ -63,6 +65,8 @@ export class AddObjectComponent implements OnInit {
   
   
     this.isDrawing = false;
+
+    this.selectedDoorsArray = [];
   
    
     const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -102,7 +106,7 @@ export class AddObjectComponent implements OnInit {
       this.prevMouseX = event.offsetX;
       this.prevMouseY = event.offsetY;
       if(this.doors.length != 0){
-        this.selectedDoor = this.getDoorInsideRectangle(rect);
+        this.getDoorInsideRectangle(rect);
       }
       
     } else if(!rect && !door){
@@ -136,7 +140,7 @@ export class AddObjectComponent implements OnInit {
     if(this.jsonData.length != 0){
       return;
     }
-    if (this.isDraggingRectangle && this.selectedRectangle && !this.selectedDoor) {
+    if (this.isDraggingRectangle && this.selectedRectangle && this.selectedDoorsArray.length == 0) {
       const dx = event.offsetX - this.prevMouseX;
       const dy = event.offsetY - this.prevMouseY;
 
@@ -167,7 +171,7 @@ export class AddObjectComponent implements OnInit {
       this.prevMouseX = event.offsetX;
       this.prevMouseY = event.offsetY;
       this.drawCanvas();
-    } else if(this.isDraggingRectangle && this.selectedRectangle && this.selectedDoor){
+    } else if(this.isDraggingRectangle && this.selectedRectangle && this.selectedDoorsArray.length != 0){
       // dragging door and rectangle together
 
       const dx = event.offsetX - this.prevMouseX;
@@ -177,8 +181,8 @@ export class AddObjectComponent implements OnInit {
       const newRectX = this.selectedRectangle.x + dx;
       const newRectY = this.selectedRectangle.y + dy;
 
-      const newDoorX = this.selectedDoor.x + dx;
-      const newDoorY = this.selectedDoor.y + dy;
+      // const newDoorX = this.selectedDoor.x + dx;
+      // const newDoorY = this.selectedDoor.y + dy;
 
       // Check for collisions with other rectangles
       const isCollision = this.rectangles.some(rect => {
@@ -197,8 +201,12 @@ export class AddObjectComponent implements OnInit {
         // Update the position of the rectangle
         this.selectedRectangle.x = newRectX;
         this.selectedRectangle.y = newRectY;
-        this.selectedDoor.x = newDoorX;
-        this.selectedDoor.y = newDoorY;
+        for(let d of this.selectedDoorsArray){
+          d.x = d.x + dx;
+          d.y = d.y + dy
+        }
+        // this.selectedDoor.x = newDoorX;
+        // this.selectedDoor.y = newDoorY;
       }
 
       // Update the previous mouse coordinates
@@ -228,49 +236,68 @@ export class AddObjectComponent implements OnInit {
       const isOnTopEdge = newY === minY && newX >= minX && newX <= maxX;
       const isOnBottomEdge = newY === maxY && newX >= minX && newX <= maxX;
 
+      const isCollision = this.doors.some(door => {
+        if (door !== this.selectedDoor) {
+          return (
+            newX < door.x + door.width &&
+            newX + this.selectedDoor.width > door.x &&
+            newY < door.y + door.height &&
+            newY + this.selectedDoor.height > door.y
+          );
+        }
+        return false;
+      });
 
-      if(newX < this.selectedRectangle.x || newX + this.selectedDoor.width > this.selectedRectangle.x + this.selectedRectangle.width ){
+      
 
-      } else {
-        
-        this.selectedDoor.x = newX;
+      if (!isCollision) {
+        // Update the position of the door
+        if(newX < this.selectedRectangle.x || newX + this.selectedDoor.width > this.selectedRectangle.x + this.selectedRectangle.width ){
+
+        } else {
+          
+          this.selectedDoor.x = newX;
+        }
+        if(newY < this.selectedRectangle.y || newY + this.selectedDoor.height > this.selectedRectangle.y + this.selectedRectangle.height){
+  
+        } else {
+          this.selectedDoor.y = newY;
+        }
+  
+        if(isOnLeftEdge){
+          
+          if(this.selectedDoor.width < this.selectedDoor.height){
+            let temp = this.selectedDoor.width;
+            this.selectedDoor.width = this.selectedDoor.height;
+            this.selectedDoor.height = temp;
+            this.selectedDoor.y += (this.selectedDoor.height - this.selectedDoor.width)
+          }
+        } else if(isOnRightEdge){
+          if(this.selectedDoor.width < this.selectedDoor.height){
+            let temp = this.selectedDoor.width;
+            this.selectedDoor.width = this.selectedDoor.height;
+            this.selectedDoor.height = temp;
+            this.selectedDoor.x += (this.selectedDoor.height - this.selectedDoor.width)
+          }
+        } else if(isOnBottomEdge){
+          if(this.selectedDoor.height < this.selectedDoor.width){
+            let temp = this.selectedDoor.width;
+            this.selectedDoor.width = this.selectedDoor.height;
+            this.selectedDoor.height = temp;
+            this.selectedDoor.y -= (this.selectedDoor.height - this.selectedDoor.width)
+          }
+        } else if(isOnTopEdge){
+          if(this.selectedDoor.height < this.selectedDoor.width){
+            let temp = this.selectedDoor.width;
+            this.selectedDoor.width = this.selectedDoor.height;
+            this.selectedDoor.height = temp;
+            //this.selectedDoor.x -= (this.selectedDoor.height - this.selectedDoor.width)
+          }
+        }
       }
-      if(newY < this.selectedRectangle.y || newY + this.selectedDoor.height > this.selectedRectangle.y + this.selectedRectangle.height){
 
-      } else {
-        this.selectedDoor.y = newY;
-      }
 
-      if(isOnLeftEdge){
-        console.log('left')
-        if(this.selectedDoor.width < this.selectedDoor.height){
-          let temp = this.selectedDoor.width;
-          this.selectedDoor.width = this.selectedDoor.height;
-          this.selectedDoor.height = temp;
-          this.selectedDoor.y += (this.selectedDoor.height - this.selectedDoor.width)
-        }
-      } else if(isOnRightEdge){
-        if(this.selectedDoor.width < this.selectedDoor.height){
-          let temp = this.selectedDoor.width;
-          this.selectedDoor.width = this.selectedDoor.height;
-          this.selectedDoor.height = temp;
-          this.selectedDoor.x += (this.selectedDoor.height - this.selectedDoor.width)
-        }
-      } else if(isOnBottomEdge){
-        if(this.selectedDoor.height < this.selectedDoor.width){
-          let temp = this.selectedDoor.width;
-          this.selectedDoor.width = this.selectedDoor.height;
-          this.selectedDoor.height = temp;
-          this.selectedDoor.y -= (this.selectedDoor.height - this.selectedDoor.width)
-        }
-      } else if(isOnTopEdge){
-        if(this.selectedDoor.height < this.selectedDoor.width){
-          let temp = this.selectedDoor.width;
-          this.selectedDoor.width = this.selectedDoor.height;
-          this.selectedDoor.height = temp;
-          //this.selectedDoor.x -= (this.selectedDoor.height - this.selectedDoor.width)
-        }
-      }
+      
 
       this.drawCanvas();
     }
@@ -363,12 +390,13 @@ export class AddObjectComponent implements OnInit {
   }
 
   getDoorInsideRectangle(rect): Rectangle | null {
+    this.selectedDoorsArray = [];
     for (const door of this.doors) {
       if (door.x >= rect.x &&
         door.y >= rect.y &&
         door.x + door.width <= rect.x + rect.width &&
         door.y + door.height <= rect.y + rect.height) {
-        return door;
+        this.selectedDoorsArray.push(door);
       }
     }
     return null;
@@ -414,28 +442,55 @@ export class AddObjectComponent implements OnInit {
     this.doors = [];
   }
 
-  addDoors(){
-    for(const rect of this.rectangles){
-      // Calculate the position and size of the square
+  // addAllDoors(){
+  //   for(const rect of this.rectangles){
+  //     // Calculate the position and size of the square
 
-      if(this.getDoorInsideRectangle(rect)){
-        continue;
+  //     if(this.getDoorInsideRectangle(rect)){
+  //       continue;
+  //     }
+  //     const width = rect.width / 10;
+  //     const height = rect.height / 5;
+
+  //     let x = rect.x + (rect.width / 2) - (width / 2);
+  //     let y = rect.y + rect.height - height;
+  //     let color = 'white';
+
+  //     const door: Rectangle = {x, y, width, height, color};
+  //     this.doors.push(door);
+
+  //     // Draw the square
+  //     this.ctx.strokeStyle = 'black';
+  //     this.ctx.lineWidth = 2;
+  //     this.ctx.strokeRect(x, y, width, height);
+  //   }
+
+  // }
+
+  addDoor(rect){
+
+    const width = rect.width / 10;
+    const height = rect.height / 5;
+
+    let x = rect.x + (rect.width / 2) - (width / 2);
+    let y = rect.y + rect.height - height;
+    let color = 'white';
+
+    const door: Rectangle = {x, y, width, height, color};
+
+    for(let d of this.doors){
+      if(this.checkIntersection(d, door)){
+        this.message = "Move door from bottom wall to add new";
+        return;
       }
-      const width = rect.width / 10;
-      const height = rect.height / 5;
-      let x = rect.x + (rect.width / 2) - (width / 2);
-      let y = rect.y + rect.height - height;
-      let color = 'white';
-
-      const door: Rectangle = {x, y, width, height, color};
-      this.doors.push(door);
-
-      // Draw the square
-      this.ctx.strokeStyle = 'black';
-      this.ctx.lineWidth = 2;
-      this.ctx.strokeRect(x, y, width, height);
     }
+    
+    this.doors.push(door);
 
+    // Draw the square
+    this.ctx.strokeStyle = 'black';
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeRect(x, y, width, height);
   }
 
 
@@ -444,9 +499,10 @@ export class AddObjectComponent implements OnInit {
   }
 
   areAllRectanglesTouching(): boolean {
+    
     for (let i = 0; i < this.rectangles.length; i++) {
+      const rect1 = this.rectangles[i];
       for (let j = i + 1; j < this.rectangles.length; j++) {
-        const rect1 = this.rectangles[i];
         const rect2 = this.rectangles[j];
         const areTouching = this.areRectanglesTouching(rect1, rect2);
         
@@ -483,10 +539,17 @@ export class AddObjectComponent implements OnInit {
 
   
   submit(){
-    if(this.rectangles.length != this.doors.length){
-      this.message = "Every rooms must have a door";
-      return;
+    for(let rec of this.rectangles){
+      this.getDoorInsideRectangle(rec);
+      if(this.selectedDoorsArray.length == 0){
+        this.message = "Every rooms must have a door";
+        return;
+      }
     }
+    // if(this.rectangles.length > this.doors.length){
+    //   this.message = "Every rooms must have a door";
+    //   return;
+    // }
     if(this.rectangles.length == 0){
       this.message = "You need to present a drawing of the household";
       return;
@@ -508,7 +571,7 @@ export class AddObjectComponent implements OnInit {
       return;
     }
 
-    this.userService.addObject(this.username, this.objectType, this.address, this.rooms, this.size, this.rectangles, this.doors).subscribe(resp => {
+    this.clientService.addObject(this.username, this.objectType, this.address, this.rooms, this.size, this.rectangles, this.doors).subscribe(resp => {
       alert(resp['message']);
       this.ngOnInit();
     })
@@ -517,14 +580,14 @@ export class AddObjectComponent implements OnInit {
 
 
 
-  checkIntersections(rectangle) {
-    for (let i = 0; i < this.rectangles.length; i++) {
-      if (rectangle.intersectsWithObject(this.rectangles[i])) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // checkIntersections(rectangle) {
+  //   for (let i = 0; i < this.rectangles.length; i++) {
+  //     if (rectangle.intersectsWithObject(this.rectangles[i])) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
 
   onFileSelected(event){

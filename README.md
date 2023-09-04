@@ -3,12 +3,13 @@ Frontend and Backend full website project done at a course called Programming In
 
 ## Technologies used:
 
-Project used MEAN stack technology which implies use of tools:
+1. Project used MEAN stack technology which implies use of tools:
 * M (MongoDB database)
 * E (Express JS)
 * A (Angular)
 * N (Nodejs)
 
+1. Bootstrap instead of CSS
 
 ### About project:
 

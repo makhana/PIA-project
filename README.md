@@ -9,7 +9,7 @@ Frontend and Backend full website project done at a course called Programming In
 * A (Angular)
 * N (Nodejs)
 
-1. Bootstrap instead of CSS
+2. Bootstrap instead of CSS
 
 ### About project:
 
